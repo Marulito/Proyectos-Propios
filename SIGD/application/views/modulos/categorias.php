@@ -40,8 +40,7 @@
                                             <label>Repetir contraseña:</label>
                                             <input type="password" class="form-control" placeholder="" autocomplete="false">
                                             <!--<p class="help-block">Example block-level help text here.</p>-->
-                                        </div>
-                                        
+                                        </div>      
                                 </div>
                                 <!-- Segunda columan -->
                                 <div class="col-sm-6 col-xs-12">
@@ -65,18 +64,18 @@
                                             <option value="1">Administrador</option>
                                             <option value="2">Contribuyente(Profesor-Secretaria)</option>
                                         </select>
+                                        <!--<p class="help-block">Example block-level help text here.</p>-->
                                     </div>
-
                                 </div>
-                              </form>
                               <!--  -->
                               <div class="col-sm-12">
-                                  <!-- Apellidos -->
-                                  <div class="form-group">
-                                      <label>Correo Electronico:</label>
-                                      <input class="form-control" placeholder="ejm: Marulanda Paniagua">
-                                      <!--<p class="help-block">Example block-level help text here.</p>-->
+                                  <!-- Correo electronico -->
+                                  <label>E-mail:</label>
+                                  <div class="form-group input-group">
+                                      <span class="input-group-addon">@</span>
+                                      <input type="text" class="form-control" placeholder="Ejem: Comercial0@corcircuitos.com">
                                   </div>
+                                  <!--<p class="help-block">Example block-level help text here.</p>-->
                               </div>
                               <!--  -->
                               <div class="col-sm-12">
@@ -87,6 +86,7 @@
 
                               </div>
                             </div>
+                         </form>
                             <!-- /.row (nested) -->
                         </div>
                         <!-- /.panel-body -->
@@ -119,6 +119,22 @@
                                     <td class="center">4</td>
                                     <td class="center">X</td>
                                     <td class="center">botones</td>
+                                </tr> 
+                                <tr class="odd gradeX">
+                                    <td>Trident</td>
+                                    <td>Internet Explorer 4.0</td>
+                                    <td>Win 95+</td>
+                                    <td class="center">4</td>
+                                    <td class="center">X</td>
+                                    <td class="center">botones</td>
+                                </tr> 
+                                <tr class="odd gradeX">
+                                    <td>Trident</td>
+                                    <td>Internet Explorer 4.0</td>
+                                    <td>Win 95+</td>
+                                    <td class="center">4</td>
+                                    <td class="center">X</td>
+                                    <td class="center">botones</td>
                                 </tr>
                                 <tr class="even gradeC">
                                     <td>Trident</td>
@@ -126,7 +142,16 @@
                                     <td>Win 95+</td>
                                     <td class="center">5</td>
                                     <td class="center">C</td>
-                                    <td class="center"><button><span><i class="fa-edit">                   </i></span></button></td>
+                                    <td class="center">
+                                        <button class="btn btn-primary btn-xs">
+                                            <span><i class="fas fa-edit"></i>
+                                            </span> Editar
+                                        </button>
+                                        <button class="btn btn-danger btn-xs">
+                                            <span><i class="fas fa-user-times"></i>
+                                            </span> Desactivar
+                                        </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

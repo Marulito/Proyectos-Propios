@@ -1,3 +1,4 @@
+<body style="height: 100%;">
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header col-sm-5">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -90,7 +91,7 @@
                     </ul>
                 </li>-->
                 <!-- /.dropdown -->
-                <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                <li><a href="login.html"><i class="fas fa-sign-out-alt fa-fw"></i> Salir</a>
                 </li>
                 <!-- /.dropdown -->
             </ul>
@@ -100,10 +101,10 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="<?php echo base_url();?>cUsuario"><i class="fa fa-dashboard fa-fw"></i> Usuarios</a>
+                            <a href="<?php echo base_url();?>cUsuario"><i class="fas fa-users fa-fw"></i> Usuarios</a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url();?>cCategoria""><i class="fa fa-table fa-fw"></i> Categorias</a>
+                            <a href="<?php echo base_url();?>cCategoria""><i class="fas fa-calendar-alt fa-fw"></i> Categorias</a>
                         </li>
                     </ul>
                 </div>
