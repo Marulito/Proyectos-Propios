@@ -9,7 +9,9 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="<?php echo base_url();?>lib/dist/js/sb-admin-2.js"></script>
-
+    
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" data-auto-replace-svg="nest"></script>
+    
     <!-- Morris Charts JavaScript -->
     <script src="<?php echo base_url();?>lib/vendor/raphael/raphael.min.js"></script>
     <script src="<?php echo base_url();?>lib/vendor/morrisjs/morris.min.js"></script>

@@ -103,7 +103,7 @@
                             <a href="<?php echo base_url();?>cUsuario"><i class="fa fa-dashboard fa-fw"></i> Usuarios</a>
                         </li>
                         <li>
-                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Categorias</a>
+                            <a href="<?php echo base_url();?>cCategoria""><i class="fa fa-table fa-fw"></i> Categorias</a>
                         </li>
                     </ul>
                 </div>
