@@ -29,19 +29,19 @@
                                 <div class="col-lg-6 col-xs-12">
                                         <!-- Numero de documento-->
                                         <div class="form-group">
-                                            <label>Documento:</label>
+                                            <label for="documento">Documento:</label>
                                             <input class="form-control" placeholder="ejm: 123456789" id="documento" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
                                             <!--<p class="help-block">Example block-level help text here.</p>-->
                                         </div>
                                         <!-- Contraseña del usuario -->
                                         <div class="form-group">
-                                            <label>Contraseña:</label>
+                                            <label for="contraseña">Contraseña:</label>
                                             <input type="password" class="form-control" placeholder="" autocomplete="false" id="contraseña" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
                                             <!--<p class="help-block">Example block-level help text here.</p>-->
                                         </div>
                                         <!-- Repetir contraseña del usuario -->
                                         <div class="form-group">
-                                            <label>Repetir contraseña:</label>
+                                            <label for="repetirContraseña">Repetir contraseña:</label>
                                             <input type="password" class="form-control" placeholder="" autocomplete="false" id="repetirContraseña" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
                                             <!--<p class="help-block">Example block-level help text here.</p>-->
                                         </div>      
@@ -50,19 +50,19 @@
                                 <div class="col-sm-6 col-xs-12">
                                     <!-- Nombre -->
                                     <div class="form-group">
-                                        <label>Nombres:</label>
+                                        <label for="nombres">Nombres:</label>
                                         <input class="form-control" placeholder=" ejm: Juan david" id="nombres" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
                                         <!--<p class="help-block">Example block-level help text here.</p>-->
                                     </div>
                                     <!-- Apellidos -->
                                     <div class="form-group">
-                                        <label>Apellidos:</label>
+                                        <label for="apellidosM">Apellidos:</label>
                                         <input class="form-control" placeholder="ejm: Marulanda Paniagua" id="apellidos" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
                                         <!--<p class="help-block">Example block-level help text here.</p>-->
                                     </div>
                                     <!-- Cargo del usuario -->
                                     <div class="form-group">
-                                        <label>Rol</label>
+                                        <label for="rol">Rol</label>
                                         <select class="form-control" id="rol" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
                                             <option value="0">seleccione...</option>
                                             <option value="1">Administrador</option>
@@ -74,7 +74,7 @@
                               <!--  -->
                               <div class="col-sm-12">
                                   <!-- Correo electronico -->
-                                  <label>E-mail:</label>
+                                  <label for="correo">E-mail:</label>
                                   <div class="form-group input-group">
                                       <span class="input-group-addon">@</span>
                                       <input type="email" class="form-control" placeholder="Ejem: Comercial0@corcircuitos.com" id="correo" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
@@ -104,45 +104,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div id="content-tabla">
-                        <!-- <table width="100%" class="table table-striped table-bordered table-hover" id="dataTableUsuario">
-                            <thead>
-                                <tr>
-                                    <th>Documento</th>
-                                    <th>Nombres</th>
-                                    <th>Apellidos</th>
-                                    <th>Rol</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="odd gradeX">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 4.0</td>
-                                    <td>Win 95+</td>
-                                    <td class="center">4</td>
-                                    <td class="center">X</td>
-                                    <td class="center">botones</td>
-                                </tr>
-                                <tr class="even gradeC">
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 5.0</td>
-                                    <td>Win 95+</td>
-                                    <td class="center">5</td>
-                                    <td class="center">C</td>
-                                    <td class="center">
-                                        <button class="btn btn-primary btn-xs">
-                                            <span><i class="fas fa-edit"></i>
-                                            </span> Editar
-                                        </button>
-                                        <button class="btn btn-danger btn-xs">
-                                            <span><i class="fas fa-user-times"></i>
-                                            </span> Desactivar
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> -->
+                    <!-- Tabla -->
                     </div>
                     <!-- /.panel -->
                 </div>
@@ -152,6 +114,86 @@
         </div>
         <!-- /#page-wrapper -->
 
+    </div>
+
+    <div class="modal fade" id="editUsuario">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h1>Usuario: </h1>
+                </div>
+                <form role="form" action="" id="formularioUsuarioModal" method="POST">
+                <div class="modal-body">
+                       <div class="row">
+                           <!-- Primera columan -->
+                           <div class="col-lg-6 col-xs-12">
+                                   <!-- Numero de documento-->
+                                   <div class="form-group">
+                                       <label for="documentoM">Documento:</label>
+                                       <input class="form-control" placeholder="ejm: 123456789" id="documentoM" data-toggle="tooltip" data-placement="top" title="Campo obligatorio" readonly="true">
+                                       <!--<p class="help-block">Example block-level help text here.</p>-->
+                                   </div>
+                                   <!-- Contraseña del usuario -->
+                                   <div class="form-group">
+                                       <label for="contraseñaM">Contraseña:</label>
+                                       <input type="password" class="form-control" placeholder="" autocomplete="false" id="contraseñaM" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
+                                       <!--<p class="help-block">Example block-level help text here.</p>-->
+                                   </div>
+                                   <!-- Repetir contraseña del usuario -->
+                                   <div class="form-group">
+                                       <label for="repetirContraseñaM">Repetir contraseña:</label>
+                                       <input type="password" class="form-control" placeholder="" autocomplete="false" id="repetirContraseñaM" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
+                                       <!--<p class="help-block">Example block-level help text here.</p>-->
+                                   </div>      
+                           </div>
+                           <!-- Segunda columan -->
+                           <div class="col-sm-6 col-xs-12">
+                               <!-- Nombre -->
+                               <div class="form-group">
+                                   <label for="nombresM">Nombres:</label>
+                                   <input class="form-control" placeholder=" ejm: Juan david" id="nombresM" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
+                                   <!--<p class="help-block">Example block-level help text here.</p>-->
+                               </div>
+                               <!-- Apellidos -->
+                               <div class="form-group">
+                                   <label for="apellidosM">Apellidos:</label>
+                                   <input class="form-control" placeholder="ejm: Marulanda Paniagua" id="apellidosM" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
+                                   <!--<p class="help-block">Example block-level help text here.</p>-->
+                               </div>
+                               <!-- Cargo del usuario -->
+                               <div class="form-group">
+                                   <label for="rolM">Rol</label>
+                                   <select class="form-control" id="rolM" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
+                                       <option value="0">seleccione...</option>
+                                       <option value="1">Administrador</option>
+                                       <option value="2">Contribuyente(Profesor-Secretaria)</option>
+                                   </select>
+                                   <!--<p class="help-block">Example block-level help text here.</p>-->
+                               </div>
+                           </div>
+                         <!--  -->
+                         <div class="col-sm-12">
+                             <!-- Correo electronico -->
+                             <label for="correoM">E-mail:</label>
+                             <div class="form-group input-group">
+                                 <span class="input-group-addon">@</span>
+                                 <input type="email" class="form-control" placeholder="Ejem: Comercial0@corcircuitos.com" id="correoM" data-toggle="tooltip" data-placement="top" title="Campo obligatorio">
+                             </div>
+                             <!--<p class="help-block">Example block-level help text here.</p>-->
+                         </div>
+                         <!--  -->
+                         <div class="col-sm-12">
+                        <!--  -->
+                         </div>
+                       </div>  
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default pull-right">Registrar</button>
+                </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     

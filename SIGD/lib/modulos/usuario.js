@@ -1,3 +1,4 @@
+// Variables
 var $doc=$('#documento');
 var $nombres=$('#nombres');
 var $apellidos=$('#apellidos');
@@ -5,37 +6,66 @@ var $contraseña1=$('#contraseña');
 var $contraseña2=$('#repetirContraseña');
 var $selectRol=$('#rol');
 var $correo=$('#correo');
-
-// Variables
+// Modal
+var $docM=$('#documentoM');
+var $nombresM=$('#nombresM');
+var $apellidosM=$('#apellidosM');
+var $contraseña1M=$('#contraseñaM');
+var $contraseña2M=$('#repetirContraseñaM');
+var $selectRolM=$('#rolM');
+var $correoM=$('#correoM');
+// .-.-.-.-.-.--.-.-.-.-.-.-.
 $(document).ready(function($) {
     // swal('Listo!','Alertas instaladas','success');
     $('#formularioUsuario').submit(function(event) {
         // Validacion formulario
-        if (form_validate()) {
-            event.preventDefault();
-            // 
-            registrarModificarUsuario({
-                documento: $doc.val(),
-                names: $nombres.val(),
-                lastNames: $apellidos.val(),
-                password: $contraseña1.val(),
-                cargo: $selectRol.val(),
-                email: $correo.children('option:selected').val(),
-                opcion: 0
-            });
-            swal('Listo!','se puede ejecutar','success');
-            // $(this).reset();
-            $('#limpiar').click();
-        }else{
-            // 
-            event.preventDefault();
-        }
+        realizarAccion(0);//Registrar
     });
+
+    $('#formularioUsuarioModal').submit(function(event) {
+        // Validacion formulario
+        realizarAccion(1);//Modificar
+    });
+
     // 
     consultarUsuarios('');
     // 
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+function realizarAccion(op) {// 0 registrar 1 modificar
+    if (form_validate(op)) {
+        event.preventDefault();
+        // 
+        swal({
+     title: "¿Estas seguro?",
+     text: 'Se '+(op==0?'Registrara':'Modificara')+' la informacion del ususario',
+     icon: "warning",
+     buttons: true,
+     dangerMode: true,
+   }).then((result) => {
+        if (result) {
+            registrarModificarUsuario({
+                documento: (op==0?$doc:$docM).val(),
+                names: (op==0?$nombres:$nombresM).val(),
+                lastNames: (op==0?$apellidos:$apellidosM).val(),
+                password: (op==0?$contraseña1:$contraseña1M).val(),
+                cargo: (op==0?$selectRol:$selectRolM).children('option:selected').val(),
+                email: (op==0?$correo:$correoM).val(),
+                opcion: op
+            });
+            swal('Listo!','Se '+(op==0?'Registro':'Modifico')+' la informacion del ususario','success');
+            // $(this).reset();
+            $('#editUsuario').modal('hide');
+            $('#formularioUsuarioModal').trigger("reset");
+            $('#limpiar').click();
+        }
+   });
+    }else{
+        // 
+        event.preventDefault();
+    }
+}
 // 
 function registrarModificarUsuario(datos) {
     $.ajax({
@@ -52,65 +82,71 @@ function registrarModificarUsuario(datos) {
     });
 }
 // 
-function form_validate() {//Falta colocar el toltip
+function form_validate(op) {//Falta colocar el toltip
     var res = true;
     // ...
-    if ($doc.val()=='') {
-        $doc.parent().addClass('has-error');
+    if ((op==0?$doc:$docM).val()=='') {
+        (op==0?$doc:$docM).parent().addClass('has-error');
         res=false;
     }else{
-        $doc.parent().removeClass('has-error');
+        (op==0?$doc:$docM).parent().removeClass('has-error');
     }
     // ...
     // ...
-    if ($nombres.val()=='') {
-        $nombres.parent().addClass('has-error');
+    if ((op==0?$nombres:$nombresM).val()=='') {
+        (op==0?$nombres:$nombresM).parent().addClass('has-error');
         res=false;
     }else{
-        $nombres.parent().removeClass('has-error');
+        (op==0?$nombres:$nombresM).parent().removeClass('has-error');
     }
     // ...
     // ...
-    if ($apellidos.val()=='') {
-        $apellidos.parent().addClass('has-error');
+    if ((op==0?$apellidos:$apellidosM).val()=='') {
+        (op==0?$apellidos:$apellidosM).parent().addClass('has-error');
         res=false;
     }else{
-        $apellidos.parent().removeClass('has-error');
+        (op==0?$apellidos:$apellidosM).parent().removeClass('has-error');
     }
     // ...
     // ...
-    if ($contraseña1.val()=='') {
-        $contraseña1.parent().addClass('has-error');
+    if ((op==0?$contraseña1:$contraseña1M).val()=='') {
+        (op==0?$contraseña1:$contraseña1M).parent().addClass('has-error');
         res=false;
     }else{
-        $contraseña1.parent().removeClass('has-error');
+        (op==0?$contraseña1:$contraseña1M).parent().removeClass('has-error');
     }
     // ...
     // ...
-    if ($contraseña2.val()=='') {
-        $contraseña2.parent().addClass('has-error');
+    if ((op==0?$contraseña2:$contraseña2M).val()=='') {
+        (op==0?$contraseña2:$contraseña2M).parent().addClass('has-error');
         res=false;
     }else{
-        $contraseña2.parent().removeClass('has-error');
+        (op==0?$contraseña2:$contraseña2M).parent().removeClass('has-error');
     }
     // ...
     // ...
-    if ($selectRol.children('option:selected').val()==0) {
-        $selectRol.parent().addClass('has-error');
+    if ((op==0?$selectRol:$selectRolM).children('option:selected').val()==0) {
+        (op==0?$selectRol:$selectRolM).parent().addClass('has-error');
         res=false;
     }else{
-        $selectRol.parent().removeClass('has-error');
+        (op==0?$selectRol:$selectRolM).parent().removeClass('has-error');
     }
     // ...
     // ...
-    if ($correo.val()=='') {
-        $correo.parent().addClass('has-error');
+    if ((op==0?$correo:$correoM).val()=='') {
+        (op==0?$correo:$correoM).parent().addClass('has-error');
         res=false;
     }else{
-        $correo.parent().removeClass('has-error');
+        (op==0?$correo:$correoM).parent().removeClass('has-error');
     }
     // ...    
     return res;
+}
+
+function mostrarInformacionUsuarioModal(documento) {
+    consultarUsuarios(documento);
+    $('#editUsuario').modal('show');
+    // console.log(documento);
 }
 
 function consultarUsuarios(doc) {
@@ -122,45 +158,60 @@ function consultarUsuarios(doc) {
     })
     .done(function(result) {
         // ...
-        $('#content-tabla').empty();
-        $('#content-tabla').html('<table width="100%" class="table table-striped table-bordered table-hover" id="dataTableUsuario">'+
-                            '<thead>'+
-                                '<tr>'+
-                                    '<th>Documento</th>'+
-                                    '<th>Nombres</th>'+
-                                    '<th>Apellidos</th>'+
-                                    '<th>Rol</th>'+
-                                    '<th>Estado</th>'+
-                                    '<th>Acciones</th>'+
-                                '</tr>'+
-                            '</thead>'+
-                            '<tbody id="cuerpo">'+
+        if (doc=='') {
+            // Tabla
+            $('#content-tabla').empty();
+            $('#content-tabla').html('<table width="100%" class="table table-striped table-bordered table-hover" id="dataTableUsuario">'+
+                                '<thead>'+
+                                    '<tr>'+
+                                        '<th>Documento</th>'+
+                                        '<th>Nombres</th>'+
+                                        '<th>Apellidos</th>'+
+                                        '<th>Rol</th>'+
+                                        '<th>Estado</th>'+
+                                        '<th>Acciones</th>'+
+                                    '</tr>'+
+                                '</thead>'+
+                                '<tbody id="cuerpo">'+
 
-                            '</tbody>'+
-                        '</table>');
-        $.each(result,function(index, row) {
-            $('#cuerpo').append('<tr class="even gradeC">'+
-                                    '<td>'+row.documento+'</td>'+
-                                    '<td>'+row.nombres+'</td>'+
-                                    '<td>'+row.apellidos+'</td>'+
-                                    '<td class="center">'+row.rol+'</td>'+
-                                    '<td class="center">'+clasificarEstado(row.estado)+'</td>'+
-                                    '<td class="center">'+
-                                        '<button class="btn btn-primary btn-xs" onclick="consultarUsuarios('+row.documento+')">'+
-                                            '<span><i class="fas fa-edit"></i>'+
-                                            '</span> Editar'+
-                                        '</button>&nbsp;'+
-                                        '<button class="btn btn-'+(row.estado==1?'danger':'success')+' btn-xs" onclick="cambiarEstadoUsuario('+row.documento+')">'+
-                                            '<span><i class="'+(row.estado==1?'fas fa-user-times':'fas fa-user-check')+'"></i>'+
-                                            '</span> '+(row.estado==1?'Desactivar':'Activar')+''+
-                                        '</button>'+
-                                    '</td>'+
-                                '</tr>');
-        });
-        // 
-        $('#dataTableUsuario').DataTable({
-            responsive: true
-        });
+                                '</tbody>'+
+                            '</table>');
+            $.each(result,function(index, row) {
+                $('#cuerpo').append('<tr class="even gradeC">'+
+                                        '<td>'+row.documento+'</td>'+
+                                        '<td>'+row.nombres+'</td>'+
+                                        '<td>'+row.apellidos+'</td>'+
+                                        '<td class="center">'+row.rol+'</td>'+
+                                        '<td class="center">'+clasificarEstado(row.estado)+'</td>'+
+                                        '<td class="center">'+
+                                            '<button class="btn btn-primary btn-xs" onclick="mostrarInformacionUsuarioModal('+row.documento+')">'+
+                                                '<span><i class="fas fa-edit"></i>'+
+                                                '</span> Editar'+
+                                            '</button>&nbsp;'+
+                                            '<button class="btn btn-'+(row.estado==1?'danger':'success')+' btn-xs" onclick="cambiarEstadoUsuario('+row.documento+')">'+
+                                                '<span><i class="'+(row.estado==1?'fas fa-user-times':'fas fa-user-check')+'"></i>'+
+                                                '</span> '+(row.estado==1?'Desactivar':'Activar')+''+
+                                            '</button>'+
+                                        '</td>'+
+                                    '</tr>');
+            });
+            // 
+            $('#dataTableUsuario').DataTable({
+                responsive: true
+            });
+        }else{
+            // Modal
+            $.each(result,function(index, row) {  
+               $docM.val(row.documento);
+               $nombresM.val(row.nombres);
+               $apellidosM.val(row.apellidos);
+               $contraseña1M.val(row.contraseña);
+               $contraseña2M.val(row.contraseña);
+               $selectRolM.children('option[value="'+row.rol+'"]').prop('selected', true);
+               $correoM.val(row.correo);
+            });
+            $('#editUsuario').modal('show');
+        }     
         // 
     })
     .fail(function() {

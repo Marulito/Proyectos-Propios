@@ -1,3 +1,4 @@
+    </body>
     <!-- jQuery 3-->
     <script src="<?php echo base_url();?>lib/vendor/jquery/jquery.min.js"></script>
 

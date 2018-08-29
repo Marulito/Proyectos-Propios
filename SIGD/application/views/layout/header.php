@@ -32,3 +32,4 @@
     <![endif]-->
 
 </head>
+<body oncontextmenu="return false">

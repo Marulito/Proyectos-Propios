@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-08-2018 a las 17:48:32
+-- Tiempo de generación: 29-08-2018 a las 23:06:42
 -- Versión del servidor: 10.1.29-MariaDB
 -- Versión de PHP: 7.2.0
 
@@ -56,7 +56,7 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_RegistrarModificarUsuario` (IN `doc` VARCHAR(13), IN `nombres` VARCHAR(45), IN `apellidos` VARCHAR(45), IN `contra` VARCHAR(100), IN `correo` INT, IN `rol` INT, IN `accion` TINYINT(1))  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_RegistrarModificarUsuario` (IN `doc` VARCHAR(13), IN `nombres` VARCHAR(45), IN `apellidos` VARCHAR(45), IN `contra` VARCHAR(100), IN `correo` VARCHAR(60), IN `rol` INT, IN `accion` TINYINT(1))  NO SQL
 BEGIN
 
 IF accion=0 THEN
@@ -165,7 +165,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`documento`, `nombres`, `apellidos`, `contraseña`, `rol`, `estado`, `correo`) VALUES
-('1216727816', 'juan david ', 'marulanda paniagua', '123456', 1, 0, '0');
+('1216727816', 'juan david ', 'marulanda paniagua', '123456', 2, 1, 'juan@hotmail.com');
 
 --
 -- Índices para tablas volcadas
