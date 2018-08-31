@@ -189,7 +189,7 @@
                        </div>  
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-default pull-right">Registrar</button>
+                    <button type="submit" class="btn btn-default pull-right">Modificar</button>
                 </div>
                 </form>
             </div>

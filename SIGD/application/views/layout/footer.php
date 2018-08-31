@@ -29,13 +29,52 @@
     <!-- .-.-.-.-.-.--.-.-.-.- -->
     <script type="text/javascript">
         var baseurl="<?php echo base_url();?>";
-        var controller= "<?php echo $this->uri->segment(1);?>";
+        // var controller= "<?php //echo $this->uri->segment(1);?>";
+        // $('#cerrarSession').click(function(event) {
+        //    $.post(baseurl+'cLogin/cerrarSession', function(data) {
+        //      /*optional stuff to do after success */
+        //    });
+        // });
     </script>
 
+    <!-- Loguin -->
+    <?php if ($this->uri->segment(1)=='' || $this->uri->segment(1)=='cLogin') { ?>
+        <script type="text/javascript">
+          //
+          var user= $('#user');
+          var pass= $('#password');
+          $(document).ready(function($) {   
+            // console.log('Ingreso al script');
+              $('#logueo').click(function(event) {
+                if ($.trim(user).length > 0 && $.trim(pass).length > 0) {
+                  $.ajax({
+                      url: baseurl+'cLogin/iniciarSession',
+                      type: 'POST',
+                      data: {user:user.val() ,pass: pass.val()},
+                      cache: "false",
+                      beforeSend:function(){
+                         $('#logueo').val('Conectando...');
+                      },
+                      success:function(data){
+                       if (data==1) {
+                           window.location.href=baseurl+'cLogin/index1';
+                       }else{
+                        $('#logueo').val("Ingresar");
+                         $('#respuesta').empty();
+                         $('#respuesta').html("<div class='alert alert-dismissible alert-danger'><button type='button' class='close' data-dismiss='alert'>&times;</button><strong>¡Error!</strong> las credenciales son incorrectas.</div>");
+                       }
+                      }
+                  }); 
+                }        
+              });  
+          });
+        </script>
+    <?php } ?> 
+
     <!-- Tabla de ususarios -->
-    <!-- <?php if ($this->uri->segment(1)=='cUsuario') {?> -->
-    <script src="<?php echo base_url();?>lib/modulos/usuario.js"></script>
-    <!-- <?php } ?> -->
+    <?php if ($this->uri->segment(1)=='cUsuario') {?>
+        <script src="<?php echo base_url();?>lib/modulos/usuario.js"></script>
+    <?php } ?>
 
     <!-- Tabla de Categorias -->
     <?php if ($this->uri->segment(1)=='cCategoria') {?>

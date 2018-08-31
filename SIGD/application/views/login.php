@@ -11,10 +11,10 @@
                         <form role="form">
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Numero de documento" name="email" type="email" autofocus autocomplete="false">
+                                    <input class="form-control" placeholder="Numero de documento" name="user" type="text" autofocus autocomplete="false" id="user">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Contraseña" name="password" type="password" value="" autocomplete="false">
+                                    <input class="form-control" placeholder="Contraseña" name="password" type="password" value="" autocomplete="false" id="password">
                                 </div>
                                 <!--<div class="checkbox">
                                     <label>
@@ -22,12 +22,20 @@
                                     </label>
                                 </div>-->
                                 <!-- Change this to a button or input when using this as a form -->
-                                <a href="<?php echo base_url();?>cLogin/index1" class="btn btn-lg btn-success btn-block">Login</a>
+                                <!-- <a >Ingresar</a> -->
+                                <!-- href="<?php //echo base_url();?>cLogin/index1" -->
+                                <input id="logueo" name="login" type="button" class="btn btn-lg btn-success btn-block" value="Ingresar">
                             </fieldset>
                         </form>
                     </div>
                 </div>
+                <span id="respuesta"></span>
+                <h4><?php echo var_dump($session); ?></h4>
             </div>
         </div>
     </div>
+
+<script type="text/javascript">
+    
+</script>
 

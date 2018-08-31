@@ -1,5 +1,5 @@
        
-    <div id="wrapper">
+    <div id="wrapper" style="height: 100%;">
 
         <!-- Navigation -->
         

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-08-2018 a las 23:06:42
+-- Tiempo de generación: 31-08-2018 a las 23:09:58
 -- Versión del servidor: 10.1.29-MariaDB
 -- Versión de PHP: 7.2.0
 
@@ -51,6 +51,21 @@ SELECT u.documento,u.nombres,u.apellidos,u.rol,u.estado FROM usuario u;
 ELSE
 #Consulta por un usuario
 SELECT * FROM usuario u WHERE u.documento=doc;
+#...
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_InicioSessionUsuario` (IN `user` VARCHAR(13), IN `pass` VARCHAR(100))  NO SQL
+BEGIN
+ 
+IF EXISTS(SELECT * FROM usuario u WHERE u.documento=user AND u.contraseña COLLATE utf8_bin=pass) THEN
+#Si existe
+SELECT u.documento,u.rol,1 AS respuesta FROM usuario u WHERE u.documento=user AND u.contraseña COLLATE utf8_bin=pass;
+#...
+ELSE
+#no existe
+SELECT 0 AS respuesta;
 #...
 END IF;
 
@@ -165,7 +180,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`documento`, `nombres`, `apellidos`, `contraseña`, `rol`, `estado`, `correo`) VALUES
-('1216727816', 'juan david ', 'marulanda paniagua', '123456', 2, 1, 'juan@hotmail.com');
+('121231245645', '45787512', 'Marulanda', '123456789', 1, 1, 'juan@hotmail.com'),
+('1216727816', 'juan david ', 'marulanda paniagua', '123456L', 2, 1, 'juan@hotmail.com');
 
 --
 -- Índices para tablas volcadas

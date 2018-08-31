@@ -75,7 +75,8 @@ function registrarModificarUsuario(datos) {
         data: datos,
     })
     .done(function(res) {
-        console.log("success "+res);
+        // console.log("success "+res);
+        consultarUsuarios('');
     })
     .fail(function() {
         console.log("error");

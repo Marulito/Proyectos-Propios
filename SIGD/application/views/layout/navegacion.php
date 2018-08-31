@@ -91,7 +91,7 @@
                     </ul>
                 </li>-->
                 <!-- /.dropdown -->
-                <li><a href="login.html"><i class="fas fa-sign-out-alt fa-fw"></i> Salir</a>
+                <li><a href="<?php echo base_url();?>cLogin/cerrarSession" id="cerrarSession"><i class="fas fa-sign-out-alt fa-fw"></i> Salir</a>
                 </li>
                 <!-- /.dropdown -->
             </ul>
