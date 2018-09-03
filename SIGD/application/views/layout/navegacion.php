@@ -7,7 +7,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">S.I.G.D</a>
+                <a class="navbar-brand" href="<?= base_url(); ?>cContenido">S.I.G.D</a>
             </div>
             <!-- /.navbar-header -->
 

@@ -37,7 +37,7 @@ function realizarAccion(op) {// 0 registrar 1 modificar
     if (form_validate(op)) {
         event.preventDefault();
         // 
-        swal({
+    swal({
      title: "¿Estas seguro?",
      text: 'Se '+(op==0?'Registrara':'Modificara')+' la informacion del ususario',
      icon: "warning",
@@ -178,23 +178,27 @@ function consultarUsuarios(doc) {
                                 '</tbody>'+
                             '</table>');
             $.each(result,function(index, row) {
-                $('#cuerpo').append('<tr class="even gradeC">'+
-                                        '<td>'+row.documento+'</td>'+
-                                        '<td>'+row.nombres+'</td>'+
-                                        '<td>'+row.apellidos+'</td>'+
-                                        '<td class="center">'+row.rol+'</td>'+
-                                        '<td class="center">'+clasificarEstado(row.estado)+'</td>'+
-                                        '<td class="center">'+
-                                            '<button class="btn btn-primary btn-xs" onclick="mostrarInformacionUsuarioModal('+row.documento+')">'+
-                                                '<span><i class="fas fa-edit"></i>'+
-                                                '</span> Editar'+
-                                            '</button>&nbsp;'+
-                                            '<button class="btn btn-'+(row.estado==1?'danger':'success')+' btn-xs" onclick="cambiarEstadoUsuario('+row.documento+')">'+
-                                                '<span><i class="'+(row.estado==1?'fas fa-user-times':'fas fa-user-check')+'"></i>'+
-                                                '</span> '+(row.estado==1?'Desactivar':'Activar')+''+
-                                            '</button>'+
-                                        '</td>'+
-                                    '</tr>');
+                if (row.documento!=doc) {
+                    if (row.estado!=2) {
+                        $('#cuerpo').append('<tr class="even gradeC">'+
+                                                '<td>'+row.documento+'</td>'+
+                                                '<td>'+row.nombres+'</td>'+
+                                                '<td>'+row.apellidos+'</td>'+
+                                                '<td class="center">'+row.rol+'</td>'+
+                                                '<td class="center">'+clasificarEstado(row.estado)+'</td>'+
+                                                '<td class="center">'+
+                                                    '<button class="btn btn-primary btn-xs" onclick="mostrarInformacionUsuarioModal('+row.documento+')">'+
+                                                        '<span><i class="fas fa-edit"></i>'+
+                                                        '</span> Editar'+
+                                                    '</button>&nbsp;'+
+                                                    '<button class="btn btn-'+(row.estado==1?'danger':'success')+' btn-xs" onclick="cambiarEstadoUsuario('+row.documento+')">'+
+                                                        '<span><i class="'+(row.estado==1?'fas fa-user-times':'fas fa-user-check')+'"></i>'+
+                                                        '</span> '+(row.estado==1?'Desactivar':'Activar')+''+
+                                                    '</button>'+
+                                                '</td>'+
+                                            '</tr>');
+                    }
+                }
             });
             // 
             $('#dataTableUsuario').DataTable({
@@ -221,13 +225,13 @@ function consultarUsuarios(doc) {
     
 }
 
-function clasificarEstado(estado) {
-    if (estado==1) {
-        return '<span><small class="label label-success">Activo</small></span>';
-    }else{
-        return '<span><small class="label label-danger">Desactivado</small></span>';
-    }
-}
+// function clasificarEstado(estado) {
+//     if (estado==1) {
+//         return '<span><small class="label label-success">Activo</small></span>';
+//     }else{
+//         return '<span><small class="label label-danger">Desactivado</small></span>';
+//     }
+// }
 
 function cambiarEstadoUsuario(doc) {
    swal({

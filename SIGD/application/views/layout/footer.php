@@ -11,6 +11,8 @@
     <!-- Custom Theme JavaScript -->
     <script src="<?php echo base_url();?>lib/dist/js/sb-admin-2.js"></script>
     
+    <!-- Funciones Generales -->
+    
     <!-- <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" data-auto-replace-svg="nest"></script> -->
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" integrity="sha256-l1iMQ6f0+8aFBzSNRxgklLlYMqu5S4b/LpaST2s+gog= sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy sha512-3dlGoFoY39YEcetqKPULIqryjeClQkr2KXshhYxFXNZAgRFZElUW9UQmYkmQE1bvB8tssj3uSKDzsj8rA04Meg==" crossorigin="anonymous"></script>
     <!-- Morris Charts JavaScript -->
@@ -28,13 +30,16 @@
     <!-- https://sweetalert.js.org/guides/ -->
     <!-- .-.-.-.-.-.--.-.-.-.- -->
     <script type="text/javascript">
+        //Base
         var baseurl="<?php echo base_url();?>";
-        // var controller= "<?php //echo $this->uri->segment(1);?>";
-        // $('#cerrarSession').click(function(event) {
-        //    $.post(baseurl+'cLogin/cerrarSession', function(data) {
-        //      /*optional stuff to do after success */
-        //    });
-        // });
+        // Funciones Generales-------------------------------------------->
+        function clasificarEstado(estado) {
+            if (estado==1) {
+                return '<span><small class="label label-success">Activo</small></span>';
+            }else{
+                return '<span><small class="label label-danger">Desactivado</small></span>';
+            }
+        }
     </script>
 
     <!-- Loguin -->
@@ -57,7 +62,7 @@
                       },
                       success:function(data){
                        if (data==1) {
-                           window.location.href=baseurl+'cLogin/index1';
+                           window.location.href=baseurl+'cContenido';
                        }else{
                         $('#logueo').val("Ingresar");
                          $('#respuesta').empty();
@@ -71,18 +76,19 @@
         </script>
     <?php } ?> 
 
-    <!-- Tabla de ususarios -->
+    <!-- Contenido -->
+    <?php if ($this->uri->segment(1)=='cContenido') {?>
+        <script src="<?php echo base_url();?>lib/modulos/contenido.js"></script>
+    <?php } ?>
+
+    <!-- Formulario de ususarios -->
     <?php if ($this->uri->segment(1)=='cUsuario') {?>
         <script src="<?php echo base_url();?>lib/modulos/usuario.js"></script>
     <?php } ?>
 
-    <!-- Tabla de Categorias -->
+    <!-- Formulario de Categorias -->
     <?php if ($this->uri->segment(1)=='cCategoria') {?>
-    <script type="text/javascript">
-        $('#dataTableUsuario').DataTable({
-            responsive: true
-        });
-    </script>
+        <script src="<?php echo base_url();?>lib/modulos/categoria.js"></script>
     <?php } ?>
 
 </body>

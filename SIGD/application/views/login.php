@@ -30,7 +30,8 @@
                     </div>
                 </div>
                 <span id="respuesta"></span>
-                <h4><?php echo var_dump($session); ?></h4>
+                <!-- <h4><?php echo var_dump($session); ?></h4> esto queda pendiente
+                <h4><?php echo var_dump($documento); ?></h4>-->
             </div>
         </div>
     </div>

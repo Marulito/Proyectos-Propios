@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-08-2018 a las 23:09:58
--- Versión del servidor: 10.1.29-MariaDB
--- Versión de PHP: 7.2.0
+-- Tiempo de generación: 03-09-2018 a las 04:03:18
+-- Versión del servidor: 10.1.31-MariaDB
+-- Versión de PHP: 7.2.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -26,6 +26,21 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_CambiarEstadoCategoria` (IN `id` INT)  NO SQL
+BEGIN
+
+IF EXISTS(SELECT * FROM categoria c WHERE c.idCategoria=id AND c.estado=1) THEN
+#Desactivar
+  UPDATE categoria c SET c.estado=0 WHERE c.idCategoria=id;
+  SELECT 1 AS respuesta;
+ELSE
+#Activar
+  UPDATE categoria c SET c.estado=1 WHERE c.idCategoria=id;
+  SELECT 2 AS respuesta;
+END IF;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_CambiarEstadoUsuario` (IN `doc` VARCHAR(13))  NO SQL
 BEGIN
 
@@ -37,6 +52,21 @@ ELSE
 #Activar
   UPDATE usuario u SET u.estado=1 WHERE u.documento=doc;
   SELECT 2 AS respuesta;
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_ConsultarCategorias` (IN `id` INT)  NO SQL
+BEGIN
+
+IF id=0 THEN
+#consulta todas las categorias
+SELECT * FROM categoria;
+
+ELSE
+#consulta solo una categoria por el id
+SELECT * FROM categoria a WHERE a.idCategoria=id;
+
 END IF;
 
 END$$
@@ -58,8 +88,8 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_InicioSessionUsuario` (IN `user` VARCHAR(13), IN `pass` VARCHAR(100))  NO SQL
 BEGIN
- 
-IF EXISTS(SELECT * FROM usuario u WHERE u.documento=user AND u.contraseña COLLATE utf8_bin=pass) THEN
+#ESTADO 0= DESACTIVADO 1=ACTIVADO 2=ADMINISTRADOR 
+IF EXISTS(SELECT * FROM usuario u WHERE u.documento=user AND u.contraseña COLLATE utf8_bin=pass AND (u.estado=1 OR u.estado=2)) THEN
 #Si existe
 SELECT u.documento,u.rol,1 AS respuesta FROM usuario u WHERE u.documento=user AND u.contraseña COLLATE utf8_bin=pass;
 #...
@@ -67,6 +97,23 @@ ELSE
 #no existe
 SELECT 0 AS respuesta;
 #...
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_RegistrarModificarCategoria` (IN `id` INT, IN `nombre` VARCHAR(45))  NO SQL
+BEGIN
+
+IF id=0 THEN
+#Registrar
+INSERT INTO `categoria`(`Categoria`) VALUES (nombre);
+#Retorno
+SELECT 1 AS respuesta;
+ELSE
+#modificar
+UPDATE `categoria` SET `Categoria`=nombre WHERE `idCategoria`=id;
+#Retorno
+SELECT 2 AS respuesta;
 END IF;
 
 END$$
@@ -97,8 +144,19 @@ DELIMITER ;
 CREATE TABLE `categoria` (
   `idCategoria` int(11) NOT NULL,
   `Categoria` varchar(45) NOT NULL,
-  `estado` tinyint(1) NOT NULL DEFAULT '0'
+  `estado` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`idCategoria`, `Categoria`, `estado`) VALUES
+(2, 'Formato', 1),
+(4, 'Procedimientos', 1),
+(5, 'Documentos Especificos', 1),
+(6, 'Caracterizaciones', 1),
+(7, 'Documentos externos', 1);
 
 -- --------------------------------------------------------
 
@@ -181,7 +239,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`documento`, `nombres`, `apellidos`, `contraseña`, `rol`, `estado`, `correo`) VALUES
 ('121231245645', '45787512', 'Marulanda', '123456789', 1, 1, 'juan@hotmail.com'),
-('1216727816', 'juan david ', 'marulanda paniagua', '123456L', 2, 1, 'juan@hotmail.com');
+('1216727816', 'juan david ', 'marulanda paniagua', '123456L', 2, 2, 'juan@hotmail.com');
 
 --
 -- Índices para tablas volcadas
@@ -237,7 +295,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `idCategoria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idCategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `documento`
