@@ -29,8 +29,6 @@ $(document).ready(function($) {
 
     // 
     consultarUsuarios('');
-    // 
-    $('[data-toggle="tooltip"]').tooltip();
 });
 
 function realizarAccion(op) {// 0 registrar 1 modificar

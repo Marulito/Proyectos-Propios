@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-09-2018 a las 04:03:18
--- Versión del servidor: 10.1.31-MariaDB
--- Versión de PHP: 7.2.3
+-- Tiempo de generación: 05-09-2018 a las 21:08:32
+-- Versión del servidor: 10.1.29-MariaDB
+-- Versión de PHP: 7.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -41,6 +41,25 @@ END IF;
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_CambiarEstadoContenido` (IN `idProceso` INT, IN `idSubPrceso` INT)  NO SQL
+BEGIN
+DECLARE estado tinyint(1);
+#...
+IF EXISTS(SELECT * FROM proceso p WHERE p.idProceso=idProceso AND p.idProceso_sub=idSubPrceso AND p.estado_visibilidad=1) THEN
+#Cambiar el estado a no visible=0
+  set estado=(select 0);
+ELSE
+#Cambir el estado a visible=1
+  set estado=(select 1);
+END IF;
+#...
+#Actualziar estado
+UPDATE `proceso` SET `estado_visibilidad`=estado WHERE `idProceso`= idProceso AND `idProceso_sub`= idSubPrceso;
+
+SELECT 1 AS respuesta;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_CambiarEstadoUsuario` (IN `doc` VARCHAR(13))  NO SQL
 BEGIN
 
@@ -67,6 +86,26 @@ ELSE
 #consulta solo una categoria por el id
 SELECT * FROM categoria a WHERE a.idCategoria=id;
 
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_ConsultarProcedimientosS` (IN `idTipo` INT, IN `TipoUser` INT, IN `idProc` INT)  NO SQL
+BEGIN
+#Consulta los procesos por el tipo de proceso
+# Consutar por el tipo de ususario
+
+IF idPro!=0 THEN
+#Consulta de gestiones
+IF TipoUser=1 THEN #Administrador
+SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo;
+ELSE #Contribuyente
+SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
+END IF;
+
+ELSE
+#consulta de procesos o sub procesos, falta la validacion del tipo de ususario.
+SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc;
 END IF;
 
 END$$
@@ -114,6 +153,28 @@ ELSE
 UPDATE `categoria` SET `Categoria`=nombre WHERE `idCategoria`=id;
 #Retorno
 SELECT 2 AS respuesta;
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_RegistrarModificarContenidoVista` (IN `idProce` INT, IN `doc` VARCHAR(13), IN `nombre` VARCHAR(45), IN `idTipoP` INT, IN `idSubProce` INT)  NO SQL
+BEGIN
+
+IF idProce=0 THEN
+#Registrar gestiones
+  IF idTipoP=1 THEN
+  INSERT INTO `proceso`(`nombre_proceso`,`idtipo_proceso`, `idProceso_sub`, `documento`) VALUES (nombre,idTipoP,(SELECT (COUNT(*)+1) FROM proceso p WHERE p.idtipo_proceso=idTipoP),doc);
+  ELSE
+   #Registrar Procesos o sub-procesos
+   INSERT INTO `proceso`(`nombre_proceso`,`idtipo_proceso`, `idProceso_sub`, `documento`) VALUES (nombre,idTipoP,idTipoP,doc);
+  END IF;
+SELECT 1 AS respuesta;
+ELSE
+#modificar
+UPDATE `proceso` SET `nombre_proceso`=nombre WHERE `idProceso`=idProce  AND `idProceso_sub`=idSubProce;
+
+SELECT 2 AS respuesta;
+
 END IF;
 
 END$$
@@ -199,11 +260,30 @@ CREATE TABLE `historial` (
 CREATE TABLE `proceso` (
   `idProceso` int(11) NOT NULL,
   `nombre_proceso` varchar(45) NOT NULL,
-  `estado_visibilidad` tinyint(1) NOT NULL DEFAULT '0',
+  `estado_visibilidad` tinyint(1) NOT NULL DEFAULT '1',
   `idtipo_proceso` tinyint(4) NOT NULL,
   `idProceso_sub` int(11) NOT NULL,
   `documento` varchar(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `proceso`
+--
+
+INSERT INTO `proceso` (`idProceso`, `nombre_proceso`, `estado_visibilidad`, `idtipo_proceso`, `idProceso_sub`, `documento`) VALUES
+(1, 'Gestión Directiva', 1, 1, 1, '1216727816'),
+(2, 'Gestion sub-Directiva', 1, 1, 2, '1216727816'),
+(3, 'Gestion Rectora', 1, 1, 3, '1216727816'),
+(4, 'Gestion sub-rectora', 1, 1, 4, '1216727816'),
+(5, 'Gestion Arepera', 1, 1, 5, '1216727816'),
+(6, 'Super_Gestion', 1, 1, 6, '1216727816'),
+(7, 'No se puede eliminar estas cosas de gestiones', 1, 1, 7, '1216727816'),
+(8, 'asdas', 1, 1, 8, '1216727816'),
+(9, 'asdasdas', 1, 1, 9, '1216727816'),
+(10, 'Nueva gene', 1, 1, 10, '1216727816'),
+(11, 'San venito', 1, 1, 11, '1216727816'),
+(12, 'Ultima Prueba de contenido', 1, 1, 12, '1216727816'),
+(13, 'Ultima prueba', 1, 2, 12, '1216727816');
 
 -- --------------------------------------------------------
 
@@ -216,6 +296,15 @@ CREATE TABLE `tipo_proceso` (
   `tipo_proceso` varchar(45) NOT NULL,
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `tipo_proceso`
+--
+
+INSERT INTO `tipo_proceso` (`idtipo_proceso`, `tipo_proceso`, `estado`) VALUES
+(1, 'Gestiones', 1),
+(2, 'Procesos', 1),
+(3, 'Sub-Procesos', 1);
 
 -- --------------------------------------------------------
 
@@ -238,8 +327,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`documento`, `nombres`, `apellidos`, `contraseña`, `rol`, `estado`, `correo`) VALUES
-('121231245645', '45787512', 'Marulanda', '123456789', 1, 1, 'juan@hotmail.com'),
-('1216727816', 'juan david ', 'marulanda paniagua', '123456L', 2, 2, 'juan@hotmail.com');
+('1216727816', 'juan david ', 'marulanda paniagua', '123456L', 1, 2, 'juan@hotmail.com'),
+('98113053240', '45787512', 'Marulanda', '123456', 2, 1, 'juan@hotmail.com');
 
 --
 -- Índices para tablas volcadas
@@ -313,7 +402,13 @@ ALTER TABLE `historial`
 -- AUTO_INCREMENT de la tabla `proceso`
 --
 ALTER TABLE `proceso`
-  MODIFY `idProceso` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idProceso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_proceso`
+--
+ALTER TABLE `tipo_proceso`
+  MODIFY `idtipo_proceso` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas

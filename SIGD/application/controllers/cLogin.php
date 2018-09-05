@@ -31,6 +31,11 @@ class cLogin extends CI_Controller
 		echo $res;
 	}
 
+	public function recuperarRol()
+	{
+		echo $this->session->userdata('tipo_Usuario');
+	}
+
 	public function cerrarSession()
 	{
 		$this->session->sess_destroy();

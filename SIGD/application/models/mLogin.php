@@ -21,7 +21,7 @@ class mLogin extends CI_Model
 		if ($res->respuesta==1) {
 			// Variable de session
 			$user_session=array('documento' => $res->documento,
-								'tipo_Usuario' => $res->rol);
+								'tipo_Usuario' => $res->rol);//Tipo de usuario 1=Administrador y 2 contribullente
 			// ...
 			$this->session->set_userdata($user_session);
 			// ...

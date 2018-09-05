@@ -8,39 +8,13 @@
 
                 <div class="col-lg-12">
                     <!-- El boton solo lo mirara los administradores -->
-                    <h1 class="page-header">Gestiones <button id="agregar" type="button" class="btn btn-outline btn-primary pull-right">+</button></h1>
+                    <h1 class="page-header"><?= $nombreT ?><small> Gestiones>Proceso>Sub-Proceso</small><button id="agregar" type="button" class="btn btn-outline btn-primary pull-right" value="<?=$opProceso?>">+</button></h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <!-- <div class="panel panel-green"> -->
-                    <!-- <div class="panel panel-yellow"> -->
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <!-- <i class="fa fa-comments fa-5x"></i> -->
-                                    <i class="fa fa-tasks fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <!-- Cantidad de Procesos -->
-                                    <div><span><i class="fas fa-check-square" style="color: ; width: 30; "></i></span></div>
-                                    <div class="huge">26</div>
-                                    <div>Nombre Gestion</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">Ingresar</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+            <div id="contenido">
+            <!-- Contenido de la pagina -->
             </div>
             <!-- /.row -->
 
@@ -64,12 +38,13 @@
                             <label>Nombre:</label>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" name="" id="nombreC" class="form-control" placeholder="Nombre gestion">
+                            <input type="text" name="" id="nombreC" class="form-control" placeholder="Nombre gestion" maxlength="45">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="registrar" class="btn btn-primary">Registrar</button>
+                    <!--  -->
+                    <button id="accionar" value="<?= $opProceso ?>" data-idcon="0" data-idproc="0" class="btn btn-primary">Registrar</button>
                 </div>
             </div>
         </div>

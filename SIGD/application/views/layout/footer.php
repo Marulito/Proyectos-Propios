@@ -32,6 +32,7 @@
     <script type="text/javascript">
         //Base
         var baseurl="<?php echo base_url();?>";
+        // ...
         // Funciones Generales-------------------------------------------->
         function clasificarEstado(estado) {
             if (estado==1) {
@@ -40,12 +41,15 @@
                 return '<span><small class="label label-danger">Desactivado</small></span>';
             }
         }
+        // Tool tips
+        $('[data-toggle="tooltip"]').tooltip();
     </script>
 
     <!-- Loguin -->
     <?php if ($this->uri->segment(1)=='' || $this->uri->segment(1)=='cLogin') { ?>
         <script type="text/javascript">
           //
+          localStorage.clear();
           var user= $('#user');
           var pass= $('#password');
           $(document).ready(function($) {   
@@ -62,6 +66,11 @@
                       },
                       success:function(data){
                        if (data==1) {
+                           // var tipoP="<?= $this->session->userdata('tipo_Usuario'); ?>";
+                           // idContenidoTipoProceso=tipoP;
+                           localStorage.setItem('Contenido',1);
+                           localStorage.setItem('idTipoP',1);
+                           // 
                            window.location.href=baseurl+'cContenido';
                        }else{
                         $('#logueo').val("Ingresar");

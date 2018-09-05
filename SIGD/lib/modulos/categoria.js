@@ -31,8 +31,6 @@ $(document).ready(function($) {
 			});
 		}
 	});
-	// Toltip
-	$('[data-toggle="tooltip"]').tooltip();
 });
 
 function validarFormulario() {
