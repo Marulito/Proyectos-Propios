@@ -1,29 +1,25 @@
-       
-    <div id="wrapper" style="height: 100%;">
-
-        <!-- Navigation -->
-        
-        <div id="page-wrapper">
-            <div class="row">
-
-                <div class="col-lg-12">
-                    <!-- El boton solo lo mirara los administradores -->
-                    <h1 class="page-header"><a href="" onclick="accionLicnk(event,this);" data-idcon="0" data-idtipo="1"><?= $nombreT ?></a> <small id="direccionamiento"></small><button id="agregar" type="button" class="btn btn-outline btn-primary pull-right" value="<?=$opProceso?>">+</button></h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div id="contenido">
-            <!-- Contenido de la pagina -->
-            </div>
-            <!-- /.row -->
-
-            <!-- /.row -->
-        </div>
-        <!-- /#page-wrapper -->
+    <!-- Hasta acá se llego el día 06/09/2018 -->
+    <div class="row">
+        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTableCategoria">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo">
+            <tr>
+                <td>Hola</td>
+                <td>Mundo</td>
+                <td>Todo Bien</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-
-    <!-- Modal -->
+    <!-- Modal de registrar nuevo documento -->
     <div class="modal fade" id="gestionarAccion">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -44,11 +40,11 @@
                 </div>
                 <div class="modal-footer">
                     <!--  -->
-                    <button id="accionar" value="<?= $opProceso ?>" data-idcon="0" data-idproc="0" class="btn btn-primary">Registrar</button>
+                    <button id="accionar" value="" class="btn btn-primary">Registrar</button>
                 </div>
             </div>
         </div>
     </div>
-</body>
+
 
     

@@ -68,7 +68,7 @@
                        if (data==1) {
                            // var tipoP="<?= $this->session->userdata('tipo_Usuario'); ?>";
                            // idContenidoTipoProceso=tipoP;
-                           localStorage.setItem('Contenido',1);
+                           localStorage.setItem('Contenido',0);
                            localStorage.setItem('idTipoP',1);
                            // 
                            window.location.href=baseurl+'cContenido';
@@ -100,6 +100,11 @@
         <script src="<?php echo base_url();?>lib/modulos/categoria.js"></script>
     <?php } ?>
 
+    <!--  -->
+    <script type="text/javascript">
+      localStorage.setItem('Contenido',0);
+      localStorage.setItem('idTipoP',1);
+    </script>
 </body>
 
 </html>

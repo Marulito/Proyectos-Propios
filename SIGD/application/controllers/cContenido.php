@@ -23,6 +23,12 @@ class cContenido extends CI_Controller
 		$this->load->view('layout/footer');
 	}
 
+	public function documentos()
+	{
+		$view= $this->load->view('layout/documentos');
+		echo $view;
+	}
+
 	public function registrarModificarContenido()
 	{
 		$info['idProceso']=$this->input->post('idCon');
@@ -49,7 +55,7 @@ class cContenido extends CI_Controller
 	public function cambiarEstadoContenido()
 	{
 		$info['idProceso']=$this->input->post('idCon');
-		$info['idSubProceso']=$this->input->post('idProceso');
+		// $info['idSubProceso']=$this->input->post('idProceso');
 
 		$res=$this->mContenido->cambiarEstadoContenidoM($info);
 
