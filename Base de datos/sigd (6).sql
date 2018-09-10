@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-09-2018 a las 21:08:32
+-- Tiempo de generación: 10-09-2018 a las 23:11:17
 -- Versión del servidor: 10.1.29-MariaDB
 -- Versión de PHP: 7.2.0
 
@@ -41,23 +41,24 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_CambiarEstadoContenido` (IN `idProceso` INT, IN `idSubPrceso` INT)  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_CambiarEstadoContenido` (IN `idProceso` INT)  NO SQL
 BEGIN
 DECLARE estado tinyint(1);
 #...
-IF EXISTS(SELECT * FROM proceso p WHERE p.idProceso=idProceso AND p.idProceso_sub=idSubPrceso AND p.estado_visibilidad=1) THEN
+IF EXISTS(SELECT * FROM proceso p WHERE p.idProceso=idProceso AND p.estado_visibilidad=1) THEN
 #Cambiar el estado a no visible=0
-  set estado=(select 0);
+  set estado=(0);
 ELSE
 #Cambir el estado a visible=1
-  set estado=(select 1);
+  set estado=(1);
 END IF;
 #...
-#Actualziar estado
-UPDATE `proceso` SET `estado_visibilidad`=estado WHERE `idProceso`= idProceso AND `idProceso_sub`= idSubPrceso;
+#Actualziar estado AND `idProceso_sub`= idSubPrceso
+UPDATE proceso p SET p.estado_visibilidad=estado WHERE p.idProceso= idProceso;
 
 SELECT 1 AS respuesta;
-
+#, {$info['idSubProceso']}
+#AND p.idProceso_sub=idSubPrceso
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_CambiarEstadoUsuario` (IN `doc` VARCHAR(13))  NO SQL
@@ -95,17 +96,22 @@ BEGIN
 #Consulta los procesos por el tipo de proceso
 # Consutar por el tipo de ususario
 
-IF idPro!=0 THEN
+IF idProc=0 THEN
 #Consulta de gestiones
 IF TipoUser=1 THEN #Administrador
 SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo;
 ELSE #Contribuyente
 SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
 END IF;
-
 ELSE
 #consulta de procesos o sub procesos, falta la validacion del tipo de ususario.
+IF  TipoUser=1 THEN#Administrador
 SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc;
+else#Contribuyente
+SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso AND p.estado_visibilidad=1) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc AND p.estado_visibilidad=1;
+
+END IF;
+
 END IF;
 
 END$$
@@ -163,18 +169,18 @@ BEGIN
 IF idProce=0 THEN
 #Registrar gestiones
   IF idTipoP=1 THEN
-  INSERT INTO `proceso`(`nombre_proceso`,`idtipo_proceso`, `idProceso_sub`, `documento`) VALUES (nombre,idTipoP,(SELECT (COUNT(*)+1) FROM proceso p WHERE p.idtipo_proceso=idTipoP),doc);
+  INSERT INTO `proceso`(`nombre_proceso`,`idtipo_proceso`, `idProceso_sub`, `documento`) VALUES (nombre,idTipoP,(SELECT (COUNT(*)+1) FROM proceso p),doc);
   ELSE
    #Registrar Procesos o sub-procesos
-   INSERT INTO `proceso`(`nombre_proceso`,`idtipo_proceso`, `idProceso_sub`, `documento`) VALUES (nombre,idTipoP,idTipoP,doc);
+   INSERT INTO `proceso`(`nombre_proceso`,`idtipo_proceso`, `idProceso_sub`, `documento`) VALUES (nombre,idTipoP,idSubProce,doc);
   END IF;
 SELECT 1 AS respuesta;
 ELSE
 #modificar
 UPDATE `proceso` SET `nombre_proceso`=nombre WHERE `idProceso`=idProce  AND `idProceso_sub`=idSubProce;
-
+#...
 SELECT 2 AS respuesta;
-
+#...
 END IF;
 
 END$$
@@ -233,7 +239,7 @@ CREATE TABLE `documento` (
   `poseedor` varchar(45) NOT NULL,
   `proteccion` varchar(45) NOT NULL,
   `tiempo_retencion` varchar(45) NOT NULL,
-  `direccion_url` varchar(100) NOT NULL,
+  `nombre_file` varchar(100) NOT NULL,
   `idCategoria` int(11) NOT NULL,
   `idProceso` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -271,19 +277,18 @@ CREATE TABLE `proceso` (
 --
 
 INSERT INTO `proceso` (`idProceso`, `nombre_proceso`, `estado_visibilidad`, `idtipo_proceso`, `idProceso_sub`, `documento`) VALUES
-(1, 'Gestión Directiva', 1, 1, 1, '1216727816'),
-(2, 'Gestion sub-Directiva', 1, 1, 2, '1216727816'),
-(3, 'Gestion Rectora', 1, 1, 3, '1216727816'),
-(4, 'Gestion sub-rectora', 1, 1, 4, '1216727816'),
-(5, 'Gestion Arepera', 1, 1, 5, '1216727816'),
-(6, 'Super_Gestion', 1, 1, 6, '1216727816'),
-(7, 'No se puede eliminar estas cosas de gestiones', 1, 1, 7, '1216727816'),
-(8, 'asdas', 1, 1, 8, '1216727816'),
-(9, 'asdasdas', 1, 1, 9, '1216727816'),
-(10, 'Nueva gene', 1, 1, 10, '1216727816'),
-(11, 'San venito', 1, 1, 11, '1216727816'),
-(12, 'Ultima Prueba de contenido', 1, 1, 12, '1216727816'),
-(13, 'Ultima prueba', 1, 2, 12, '1216727816');
+(1, 'Primera gestion1', 1, 1, 1, '1216727816'),
+(2, 'gestion 1', 1, 1, 2, '1216727816'),
+(3, 'Nueva gestion', 1, 1, 3, '1216727816'),
+(4, 'Ernesto', 1, 2, 1, '1216727816'),
+(5, 'Alejandro', 1, 2, 1, '1216727816'),
+(6, 'Anderson 2', 1, 3, 4, '1216727816'),
+(7, 'nueva gestion', 1, 1, 7, '1216727816'),
+(8, 'nueva gestion 2', 1, 1, 8, '1216727816'),
+(9, 'nueva gestion 3', 1, 1, 9, '1216727816'),
+(10, 'nuevo sub proceso', 1, 3, 4, '1216727816'),
+(11, 'otro sub proceso', 1, 3, 5, '1216727816'),
+(12, 'ajsjdasdasda', 1, 1, 12, '1216727816');
 
 -- --------------------------------------------------------
 
@@ -402,7 +407,7 @@ ALTER TABLE `historial`
 -- AUTO_INCREMENT de la tabla `proceso`
 --
 ALTER TABLE `proceso`
-  MODIFY `idProceso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idProceso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_proceso`

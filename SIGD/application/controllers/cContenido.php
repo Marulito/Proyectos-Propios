@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * 
  */
@@ -24,7 +24,9 @@ class cContenido extends CI_Controller
 	}
 
 	public function documentos()
-	{
+	{	
+		// Enviar los documentos para cargar en la vista
+
 		$view= $this->load->view('layout/documentos');
 		echo $view;
 	}

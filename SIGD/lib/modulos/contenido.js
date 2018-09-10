@@ -2,12 +2,40 @@
 var $name=$('#nombreC');
 var $btnAccion1= $('#accionar');//Registrar cuando no tiene atributos data es registrar pero cuando si los tiene es modificar
 var $btnAccion2= $('.modificar');//Mostrar modal modificar-->Ya no es necesaria esta variable
-var $modal=$('#gestionarAccion');
+var $modal1=$('#gestionarAccion');
+var $modal2=$('#gestionDocumentos');
 var $PosicionActual=$('#direccionamiento');
 // 
 $(document).ready(function($) {
 	// Consultar Contenidos
 	consultarContenidos(localStorage.getItem('idTipoP'),localStorage.getItem('Contenido'));//ID tipo proceso e ID Contendio
+
+	//Registrar o Modificar Documentos
+	$('#formularioDoc').submit(function(event) {
+		event.preventDefault();
+		// Validar formulario esta pendiente
+		if ($('#userfile').val()=='') {
+			console.log('Porfavor carga un documento');
+		}else{
+			// cargar el documento
+			$.ajax({
+				url: baseurl+'cDocumento/',
+				type: 'default GET (Other values: POST)',
+				dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+				data: {param1: 'value1'},
+			})
+			.done(function() {
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+			
+		}
+	});
 
 	// Mostrar modal Registrar
 	$('#agregar').click(function(event) {
@@ -16,10 +44,17 @@ $(document).ready(function($) {
 		$btnAccion1.data('idproc', localStorage.getItem('Contenido'));
 		$btnAccion1.val(localStorage.getItem('idTipoP'));
 		// $btnAccion1.data('parent', 0);
-		modificarModal();
-		$name.val('');
-		$modal.modal('show');
-		// Cambiar valores del boton del modal para registrar
+		if (localStorage.getItem('idTipoP')==4) {
+			// Documentos
+			$modal2.modal('show');
+			$('#accionar').val('0');
+		}else{
+			// Carpetas
+			modificarModal();
+			$name.val('');
+			$modal1.modal('show');
+			// Cambiar valores del boton del modal para registrar
+		}
 	});
 
 	// Registrar Gestiones, Procesos o sub-procesos
@@ -61,7 +96,7 @@ function mostrarModalEditar(idCon,idProc,nombre,event) {
 	$btnAccion1.data('idproc', idProc);
 	$btnAccion1.val(localStorage.getItem('idTipoP'));
 	$name.val(nombre);
-	$modal.modal('show');
+	$modal1.modal('show');
 }
 // Cambiar estado del contenido que este visible o no visible
 function cambiarEstadoContenido(idCon,idProc,event) {
@@ -109,7 +144,7 @@ function registrarModificarContenido(idCon,idProc) {
 					.done(function(dato) {
 						// console.log("success "+dato);
 						consultarContenidos(localStorage.getItem('idTipoP'),localStorage.getItem('Contenido'));
-						$modal.modal('hide');
+						$modal1.modal('hide');
 						swal('Realizado!','La gestion fue '+dato==1?'Registrada':'Modificar'+'Correctamente','success',{buttons: false, timer: 2000});
 					})
 					.fail(function() {
@@ -130,7 +165,8 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 			// $(this).remove();
 			$(this).empty();
 		});
-
+		localStorage.setItem('idTipoP',(idTipoP+1));
+		// Hasta acá se llego el 06/09/2018
 		$.post(baseurl+'cContenido/documentos', function(data) {
 			console.log(data);
 			$('#contenido').append(data);
@@ -152,6 +188,7 @@ function consultarContenidos(tipo,idcon) {//ID Tipo proceso y ID del proceso
 		var result= JSON.parse(data);
 		/*optional stuff to do after success */
 		var con=0;
+		var i=0;
 		$('#contenido').children('div').hide('fast', function() {
 			// $(this).remove();
 			$(this).empty();
@@ -161,6 +198,7 @@ function consultarContenidos(tipo,idcon) {//ID Tipo proceso y ID del proceso
 					//
 					var tipo=data;
 					$.each(result,function(index, item) {
+						i++;
 						// 
 						if (con==0) {//Inicio de fila
 							$('#contenido').append('<div class="row">');//Filas del contenido
@@ -212,7 +250,7 @@ function consultarContenidos(tipo,idcon) {//ID Tipo proceso y ID del proceso
 						// mensaje+='</div>';
 					}
 					// 
-					if (con==0) {
+					if (i==0) {
 						$('#contenido').append('<div><h2>Vacio...</h2></div>');
 					}
 					// $('#contenido').append($(mensaje));
@@ -271,7 +309,6 @@ function modificarModal() {
 	}
 	$name.attr('placeholder',placeholder);
 	$('#titulo').text(titulo);
-
 	// Modificar el valor del boton del modal...
 }
 

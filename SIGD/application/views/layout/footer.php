@@ -5,6 +5,9 @@
     <!-- Bootstrap 3 Core JavaScript -->
     <script src="<?php echo base_url();?>lib/vendor/bootstrap/js/bootstrap.min.js"></script>
 
+    <!-- File-Input Bootstrap  Esta libreria me genera problemas -->
+    <!-- <script src="<?php //echo baseurl();?>lib/js/File-input/bootstrap-filestyle.js"></script> -->
+
     <!-- Metis Menu Plugin JavaScript -->
     <script src="<?php echo base_url();?>lib/vendor/metisMenu/metisMenu.min.js"></script>
 
@@ -12,7 +15,6 @@
     <script src="<?php echo base_url();?>lib/dist/js/sb-admin-2.js"></script>
     
     <!-- Funciones Generales -->
-    
     <!-- <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" data-auto-replace-svg="nest"></script> -->
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" integrity="sha256-l1iMQ6f0+8aFBzSNRxgklLlYMqu5S4b/LpaST2s+gog= sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy sha512-3dlGoFoY39YEcetqKPULIqryjeClQkr2KXshhYxFXNZAgRFZElUW9UQmYkmQE1bvB8tssj3uSKDzsj8rA04Meg==" crossorigin="anonymous"></script>
     <!-- Morris Charts JavaScript -->
@@ -101,10 +103,10 @@
     <?php } ?>
 
     <!--  -->
-    <script type="text/javascript">
+   <!--  <script type="text/javascript">
       localStorage.setItem('Contenido',0);
       localStorage.setItem('idTipoP',1);
-    </script>
+    </script> -->
 </body>
 
 </html>
