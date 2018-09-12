@@ -66,12 +66,12 @@
                             <!-- primera columna  -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Nombre:</label>
-                                <input type="text" name="" id="nombreC" class="form-control" placeholder="Nombre de documento" maxlength="60">
+                                <input type="text" name="nombreD" id="nombreC" class="form-control" placeholder="Nombre de documento" maxlength="60">
                             </div>
                             <!-- segunda columna -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Categoria:</label>
-                                <select class="form-control" id="">
+                                <select class="form-control" id="categoria" name="categoria">
                                     <option value="0">Categoria</option>
                                     <option value="1">Categoria</option>
                                     <option value="2">Categoria</option>
@@ -84,12 +84,12 @@
                             <!-- primera columna  -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Vigencia:</label>
-                                <input type="text" name="" id="nombreC" class="form-control" placeholder="DD/MM/YYYY" maxlength="10">
+                                <input type="text" name="vigencia" id="vigencia" class="form-control" placeholder="DD/MM/YYYY" maxlength="10">
                             </div>
                             <!-- segunda columna -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Poseedor:</label>
-                                <input type="text" name="" id="nombreC" class="form-control" placeholder="Nombre de documento" maxlength="45">
+                                <input type="text" name="poseedor" id="poseedor" class="form-control" placeholder="Nombre de documento" maxlength="45">
                             </div>
                         </div><br>
                         <!-- tercera fila -->
@@ -97,12 +97,12 @@
                             <!-- primera columna  -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Version:</label>
-                                <input type="text" name="" id="nombreC" class="form-control" placeholder="Nombre de documento" maxlength="3">
+                                <input type="text" name="version" id="version" class="form-control" placeholder="Nombre de documento" maxlength="3">
                             </div>
                             <!-- segunda columna -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Proteccion:</label>
-                                <input type="text" name="" id="nombreC" class="form-control" placeholder="Nombre de documento" maxlength="60">
+                                <input type="text" name="proteccion" id="proteccion" class="form-control" placeholder="Nombre de documento" maxlength="60">
                             </div>
                         </div>
                         <br>

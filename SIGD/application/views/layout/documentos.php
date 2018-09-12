@@ -1,4 +1,4 @@
-    <!-- Hasta acá se llego el día 06/09/2018 -->
+    <!-- Consultar todos los documentos que estan asociado a este proceso -->
     <div class="row">
         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTableCategoria">
             <thead>

@@ -19,21 +19,19 @@ $(document).ready(function($) {
 		}else{
 			// cargar el documento
 			$.ajax({
-				url: baseurl+'cDocumento/',
-				type: 'default GET (Other values: POST)',
-				dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
-				data: {param1: 'value1'},
-			})
-			.done(function() {
-				console.log("success");
+				url: baseurl+'cDocumento/registrarModificarInfoDocumento',
+				type: 'POST',
+				data: new FormData(this),
+				contentType: false,
+				cache: false,
+				processData: false,
+				success:function (data) {
+					console.log(data);
+				}
 			})
 			.fail(function() {
 				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
 			});
-			
 		}
 	});
 
