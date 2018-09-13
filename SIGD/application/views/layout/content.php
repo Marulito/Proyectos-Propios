@@ -66,16 +66,16 @@
                             <!-- primera columna  -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Nombre:</label>
-                                <input type="text" name="nombreD" id="nombreC" class="form-control" placeholder="Nombre de documento" maxlength="60">
+                                <input type="text" name="nombreD" id="nombreD" class="form-control" placeholder="Nombre de documento" maxlength="60">
                             </div>
                             <!-- segunda columna -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Categoria:</label>
                                 <select class="form-control" id="categoria" name="categoria">
-                                    <option value="0">Categoria</option>
-                                    <option value="1">Categoria</option>
-                                    <option value="2">Categoria</option>
-                                    <option value="3">Categoria</option>
+                                    <option value="0">Seleccione...</option>
+                                    <?php foreach ($categorias as $cat) {
+                                        echo "<option value=".$cat->idCategoria.">".$cat->Categoria."</option>";
+                                    } ?>
                                 </select>
                             </div>
                         </div><br>

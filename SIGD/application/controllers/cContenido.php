@@ -9,6 +9,7 @@ class cContenido extends CI_Controller
 	{
 	   parent::__construct();
 	   $this->load->model('mContenido');
+	   $this->load->model('mCategoria');
 	}
 
 	public function index()
@@ -16,6 +17,7 @@ class cContenido extends CI_Controller
 		$info['opProceso']=1;//1=Gestiones , 2=Procesos y 3=SubProcesos //Consultar los procesos
 		$info['nombreT']='Gestiones';
 		//Contenidos
+		$info['categorias']= $this->mCategoria->consultarCategoriasM(-1);
 		// ---
 		$this->load->view('layout/header');
 		$this->load->view('layout/navegacion');
@@ -26,7 +28,6 @@ class cContenido extends CI_Controller
 	public function documentos()
 	{	
 		// Enviar los documentos para cargar en la vista
-
 		$view= $this->load->view('layout/documentos');
 		echo $view;
 	}

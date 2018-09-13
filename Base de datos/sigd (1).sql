@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-09-2018 a las 23:28:22
+-- Tiempo de generación: 13-09-2018 a las 23:24:09
 -- Versión del servidor: 10.1.29-MariaDB
 -- Versión de PHP: 7.2.0
 
@@ -82,11 +82,14 @@ BEGIN
 IF id=0 THEN
 #consulta todas las categorias
 SELECT * FROM categoria;
-
 ELSE
-#consulta solo una categoria por el id
-SELECT * FROM categoria a WHERE a.idCategoria=id;
-
+ IF id=-1 THEN
+   #Consulta solo las categorias que estan activas
+   SELECT * FROM categoria a WHERE a.estado=1;
+ ELSE
+   #consulta solo una categoria por el id
+   SELECT * FROM categoria a WHERE a.idCategoria=id;
+ END IF;
 END IF;
 
 END$$
@@ -185,6 +188,28 @@ END IF;
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_RegistrarModificarDocumento` (IN `nombre` VARCHAR(60), IN `version` VARCHAR(3), IN `vigencia` VARCHAR(13), IN `poseedor` VARCHAR(45), IN `proteccion` VARCHAR(45), IN `name_file` VARCHAR(100), IN `idcategoria` INT, IN `idProceso` INT, IN `idDocumento` INT)  NO SQL
+BEGIN
+
+#validar la existencia del sub-proceso
+IF EXISTS(SELECT * FROM proceso p WHERE p.idProceso=idProceso AND p.idtipo_proceso=3) THEN#El id es de un proceso de tipo sub-proceso
+    #Registrar documentos
+    IF idDocumento=0 THEN
+    	INSERT INTO `documento`(`nombre`, `varsion`, `vigencia`, `poseedor`, `proteccion`, `tiempo_retencion`, `nombre_file`, `idCategoria`, `idProceso`) VALUES (nombre,version,vigencia,poseedor,proteccion,'-',name_file,idcategoria,idProceso);
+	SELECT 1 AS respuesta;#Registrado
+    ELSE
+    #Modificar Documentos
+      UPDATE `documento` SET `nombre`=nombre,`varsion`=version,`vigencia`=vigencia,`poseedor`=poseedor,`proteccion`=proteccion,`tiempo_retencion`='',`nombre_file`=name_file,`idCategoria`=idcategoria WHERE `idDocumento`=idDocumento;
+	SELECT 2 AS respuesta;#Modificado
+    END IF;
+ELSE
+#Error retornar un valor negativo
+SELECT -1 AS respuesta;
+#
+END IF;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_RegistrarModificarUsuario` (IN `doc` VARCHAR(13), IN `nombres` VARCHAR(45), IN `apellidos` VARCHAR(45), IN `contra` VARCHAR(100), IN `correo` VARCHAR(60), IN `rol` INT, IN `accion` TINYINT(1))  NO SQL
 BEGIN
 
@@ -241,8 +266,16 @@ CREATE TABLE `documento` (
   `tiempo_retencion` varchar(45) NOT NULL,
   `nombre_file` varchar(100) NOT NULL,
   `idCategoria` int(11) NOT NULL,
-  `idProceso` int(11) NOT NULL
+  `idProceso` int(11) NOT NULL,
+  `estado` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `documento`
+--
+
+INSERT INTO `documento` (`idDocumento`, `nombre`, `varsion`, `vigencia`, `poseedor`, `proteccion`, `tiempo_retencion`, `nombre_file`, `idCategoria`, `idProceso`, `estado`) VALUES
+(5, 'segundo documento', '2', '2018-01-13', 'digo', 'magda', '', 'Piano1.pdf', 2, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -395,7 +428,7 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `documento`
 --
 ALTER TABLE `documento`
-  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `historial`

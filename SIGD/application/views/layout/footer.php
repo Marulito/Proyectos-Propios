@@ -68,7 +68,7 @@
                       },
                       success:function(data){
                        if (data==1) {
-                           // var tipoP="<?= $this->session->userdata('tipo_Usuario'); ?>";
+                           // var tipoP="<?= //$this->session->userdata('tipo_Usuario'); ?>";
                            // idContenidoTipoProceso=tipoP;
                            localStorage.setItem('Contenido',0);
                            localStorage.setItem('idTipoP',1);

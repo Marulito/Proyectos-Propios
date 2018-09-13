@@ -6,20 +6,23 @@ var $modal1=$('#gestionarAccion');
 var $modal2=$('#gestionDocumentos');
 var $PosicionActual=$('#direccionamiento');
 // 
+// 
 $(document).ready(function($) {
 	// Consultar Contenidos
 	consultarContenidos(localStorage.getItem('idTipoP'),localStorage.getItem('Contenido'));//ID tipo proceso e ID Contendio
 
 	//Registrar o Modificar Documentos
-	$('#formularioDoc').submit(function(event) {
+	$('#formularioDoc').submit(function(event) {//Validacion de campos
 		event.preventDefault();
 		// Validar formulario esta pendiente
+		// var data = new FormData(this);
+		// console.log(data);
 		if ($('#userfile').val()=='') {
 			console.log('Porfavor carga un documento');
 		}else{
 			// cargar el documento
 			$.ajax({
-				url: baseurl+'cDocumento/registrarModificarInfoDocumento',
+				url: baseurl+'cDocumento/do_upload',
 				type: 'POST',
 				data: new FormData(this),
 				contentType: false,
@@ -27,6 +30,18 @@ $(document).ready(function($) {
 				processData: false,
 				success:function (data) {
 					console.log(data);
+					if (data!='') {
+						registrarModificarInformacionDocumento({
+							nombre: $('#nombreD').val(),
+							categoria: $('#categoria').children('option:selected').val(),
+							vigencia: $('#vigencia').val(),
+							poseedor: $('#poseedor').val(),
+							version: $('#version').val(),
+							proteccion: $('#proteccion').val(),
+							namePDF: data,
+							idD: $('#accionar').val()//0=Registrar y 1=Modificar
+						});
+					}
 				}
 			})
 			.fail(function() {
@@ -76,6 +91,23 @@ $(document).ready(function($) {
 	}
 });
 
+function registrarModificarInformacionDocumento(datos) {
+	$.ajax({
+		url:  baseurl+'cDocumento/registrarModificarInformacionDocumento',
+		type: 'POST',
+		data: datos,
+		cache:false,
+		beforeSend:function () {
+			// Mostrar el cargando en la pantalla
+		},
+		success:function (dato) {
+			// mostrar el sweet Alert
+			console.log(dato);
+		}
+	}).fail(function(error) {
+		console.log(error);
+	});
+}
 // Accion de link de los titulos
 function accionLicnk(event,elemento) {
 	event.preventDefault();
