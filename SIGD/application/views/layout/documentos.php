@@ -10,12 +10,14 @@
                 </tr>
             </thead>
             <tbody id="cuerpo">
-            <tr>
-                <td>Hola</td>
-                <td>Mundo</td>
-                <td>Todo Bien</td>
-                <td></td>
-            </tr>
+              <?php foreach ($Documentos as $document):
+                    echo "<tr>
+                           <td>".$document->idDocumento."</td>
+                           <td>".$document->nombre."</td>
+                           <td>".$document->estado."</td>
+                           <td></td>
+                        </tr>";
+               endforeach ?>
             </tbody>
         </table>
     </div>

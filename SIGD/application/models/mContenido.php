@@ -33,7 +33,6 @@ class mContenido extends CI_Model
 
 	public function cambiarEstadoContenidoM($info)
 	{
-		
 		$query=$this->db->query("CALL PA_CambiarEstadoContenido({$info['idProceso']});");
 
 		$res= $query->row();

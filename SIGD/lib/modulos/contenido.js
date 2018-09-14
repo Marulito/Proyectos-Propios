@@ -39,7 +39,8 @@ $(document).ready(function($) {
 							version: $('#version').val(),
 							proteccion: $('#proteccion').val(),
 							namePDF: data,
-							idD: $('#accionar').val()//0=Registrar y 1=Modificar
+							idD: $('#accionar').val(),//0=Registrar y n>0=Modificar
+							idProceso: localStorage.getItem('Contenido')//Variable del localStorage no quiero depender 100% de ella
 						});
 					}
 				}
@@ -99,15 +100,23 @@ function registrarModificarInformacionDocumento(datos) {
 		cache:false,
 		beforeSend:function () {
 			// Mostrar el cargando en la pantalla
+			$('#accionar').text('Enviando...');
 		},
 		success:function (dato) {
 			// mostrar el sweet Alert
-			console.log(dato);
+			if (dato==1) {
+			    $modal2.modal('hide');
+			    console.log(dato);
+			    console.log(datos.idD);
+				swal('Realizado!','El documiento fue cargado correctamente.','success',{buttons:false,timer:2000});		
+			}
 		}
 	}).fail(function(error) {
-		console.log(error);
+		// console.log(error);
+		swal('Error!','Ocurrio un error en el procedimiento','error',{buttons:false,timer:2000});
 	});
 }
+
 // Accion de link de los titulos
 function accionLicnk(event,elemento) {
 	event.preventDefault();
@@ -128,6 +137,7 @@ function mostrarModalEditar(idCon,idProc,nombre,event) {
 	$name.val(nombre);
 	$modal1.modal('show');
 }
+
 // Cambiar estado del contenido que este visible o no visible
 function cambiarEstadoContenido(idCon,idProc,event) {
 	event.preventDefault();
@@ -195,11 +205,12 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 			// $(this).remove();
 			$(this).empty();
 		});
+		localStorage.setItem('Contenido',idCon);
 		localStorage.setItem('idTipoP',(idTipoP+1));
 		// Hasta acá se llego el 06/09/2018
-		$.post(baseurl+'cContenido/documentos', function(data) {
+		$.post(baseurl+'cContenido/documentos',{idDoc:0,idPro:idCon}, function(data) {
 			console.log(data);
-			$('#contenido').append(data);
+			$('#contenido').append(data);//Hasta acá se llego el 14/09/2018
 		});
 		// Mostrar modal de documentos...
 	}else{

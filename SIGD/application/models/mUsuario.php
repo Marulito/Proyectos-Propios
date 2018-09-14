@@ -18,7 +18,6 @@ class mUsuario extends CI_Model
 		$rest= $query->row();
 
 		return $rest->respuesta;
-
 	}
 
 	public function consultarUsuariosM($doc)

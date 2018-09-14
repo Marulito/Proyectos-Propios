@@ -68,7 +68,6 @@
                       },
                       success:function(data){
                        if (data==1) {
-                           // var tipoP="<?= //$this->session->userdata('tipo_Usuario'); ?>";
                            // idContenidoTipoProceso=tipoP;
                            localStorage.setItem('Contenido',0);
                            localStorage.setItem('idTipoP',1);
@@ -103,10 +102,12 @@
     <?php } ?>
 
     <!--  -->
-   <!--  <script type="text/javascript">
+    <script type="text/javascript">
       localStorage.setItem('Contenido',0);
       localStorage.setItem('idTipoP',1);
-    </script> -->
+    </script>
+    <!--  -->
+    
 </body>
 
 </html>

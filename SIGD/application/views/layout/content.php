@@ -1,8 +1,5 @@
-       
     <div id="wrapper" style="height: 100%;">
-
-        <!-- Navigation -->
-        
+        <!-- Navigation --> 
         <div id="page-wrapper">
             <div class="row">
 
@@ -60,7 +57,7 @@
                     <h3 id="titulo">Documentos</h3>
                 </div>
                 <div class="modal-body">
-                    <form id="formularioDoc" action="<?php echo base_url()?>cDocumento/do_upload" method="POST" enctype="multipart/form-data">
+                    <form id="formularioDoc" method="POST" enctype="multipart/form-data" action="<?= base_url()?>cDocumento/do_upload">
                         <!-- Primera fila -->
                         <div class="row">
                             <!-- primera columna  -->
@@ -75,7 +72,7 @@
                                     <option value="0">Seleccione...</option>
                                     <?php foreach ($categorias as $cat) {
                                         echo "<option value=".$cat->idCategoria.">".$cat->Categoria."</option>";
-                                    } ?>
+                                    } ?> 
                                 </select>
                             </div>
                         </div><br>
@@ -84,12 +81,12 @@
                             <!-- primera columna  -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Vigencia:</label>
-                                <input type="text" name="vigencia" id="vigencia" class="form-control" placeholder="DD/MM/YYYY" maxlength="10">
+                                <input type="text" name="vigencia" id="vigencia" class="form-control" placeholder="DD-MM-YYYY" maxlength="10">
                             </div>
                             <!-- segunda columna -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Poseedor:</label>
-                                <input type="text" name="poseedor" id="poseedor" class="form-control" placeholder="Nombre de documento" maxlength="45">
+                                <input type="text" name="poseedor" id="poseedor" class="form-control" placeholder="Nombre del poseedor" maxlength="45">
                             </div>
                         </div><br>
                         <!-- tercera fila -->
@@ -97,7 +94,7 @@
                             <!-- primera columna  -->
                             <div class="col-sm-6 col-xs-12">
                                 <label>Version:</label>
-                                <input type="text" name="version" id="version" class="form-control" placeholder="Nombre de documento" maxlength="3">
+                                <input type="text" name="version" id="version" class="form-control" placeholder="1" maxlength="3">
                             </div>
                             <!-- segunda columna -->
                             <div class="col-sm-6 col-xs-12">

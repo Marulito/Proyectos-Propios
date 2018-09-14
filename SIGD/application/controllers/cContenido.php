@@ -27,8 +27,16 @@ class cContenido extends CI_Controller
 
 	public function documentos()
 	{	
+		$this->load->model('mDocumento');
 		// Enviar los documentos para cargar en la vista
-		$view= $this->load->view('layout/documentos');
+		$info['idDocumento'] = $this->input->post('idDoc');;//0=Consulta todos en general, n>0 consulta los datos del documento por el idDocumento
+		$info['idProceso'] = $this->input->post('idPro');// Que documentos va a buscar...
+		$info['tipo_ususario'] =$this->session->userdata('tipo_Usuario');
+
+		$dato['Documentos']= $this->mDocumento->consultarDocumentosM($info);
+
+		$view= $this->load->view('layout/documentos',$dato);
+
 		echo $view;
 	}
 

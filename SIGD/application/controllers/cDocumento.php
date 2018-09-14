@@ -27,36 +27,31 @@ class cDocumento extends CI_Controller
 			if (!$this->upload->do_upload('userfile')) {
 				// Va a retornar que no se pudo montar el documento
 				// echo $mensaje="No subio el documento error: ".$this->upload->display_errors();
-			    // echo $config['upload_path'];
 				echo "";
 			}else{
 				// Si se pudo montar el documento
 				$data= $this->upload->data();
 				echo $data['file_name'];
-				// echo ('Nombre: \n'.$_POST["nombreD"]);
 			}
-			// echo json_encode("1");
 		}
 	}
 
 	public function registrarModificarInformacionDocumento()
 	{
 		$info['name']=$this->input->post('nombre');
-		$info['categoria']=$this->input->post('categoria');
 		$info['vigencia']=$this->input->post('vigencia');
 		$info['poseedor']=$this->input->post('poseedor');
 		$info['version']=$this->input->post('version');
 		$info['proteccion']=$this->input->post('proteccion');
 		$info['namePDF']=$this->input->post('namePDF');
-		$info['idDocumento']=$this->input->post('idD');
+		$info['categoria']=$this->input->post('categoria');
+		$info['idDocumento']= $this->input->post('idD');
+		$info['proceso']=$this->input->post('idProceso');
 		// Realizar acción
-
 		$res= $this->mDocumento->registrarModificarInfoDocumentoM($info);
 
 		echo $res;
 	}
-
-
 
 	// public function do_upload()//Primero subir el documento y despues registrar la descripción por manera más segura
 	// {
