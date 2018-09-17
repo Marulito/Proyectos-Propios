@@ -53,6 +53,15 @@ class cDocumento extends CI_Controller
 		echo $res;
 	}
 
+	public function cambiarEstadoDocumento()
+	{
+		$id= $this->input->post('idD');
+
+		$res= $this->mDocumento->cambiarEstadoDocumentoM($id);
+
+		echo $res;
+	}
+
 	// public function do_upload()//Primero subir el documento y despues registrar la descripción por manera más segura
 	// {
 	// 	$config['upload_path']= './lib/uploads/';

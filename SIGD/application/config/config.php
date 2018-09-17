@@ -22,7 +22,7 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost:9090/Proyectos-Propios/SIGD/';
+$config['base_url'] = 'http://localhost:90/Proyectos-Propios/SIGD/';
 
 /*
 |--------------------------------------------------------------------------

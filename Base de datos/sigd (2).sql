@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-09-2018 a las 23:24:50
--- Versión del servidor: 10.1.29-MariaDB
--- Versión de PHP: 7.2.0
+-- Tiempo de generación: 17-09-2018 a las 02:01:53
+-- Versión del servidor: 10.1.31-MariaDB
+-- Versión de PHP: 7.2.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -99,15 +99,15 @@ BEGIN
 
 IF TipoUser=1 THEN #administrador
 	IF idDocumento<=0 THEN #Consulta general
-    	SELECT * FROM documento d WHERE d.idProceso=idProceso;
+    	SELECT d.idDocumento,d.nombre,d.varsion,d.vigencia,d.poseedor,d.tiempo_retencion,d.nombre_file,c.Categoria,d.idProceso,d.estado FROM documento d JOIN categoria c ON d.idCategoria=c.idCategoria WHERE d.idProceso=idProceso;
     ELSE#Consulta especifica
-    	SELECT * FROM documento d WHERE d.idProceso=idProceso AND d.idDocumento=idDocumento;
+    	SELECT  d.idDocumento,d.nombre,d.varsion,d.vigencia,d.poseedor,d.tiempo_retencion,d.nombre_file,c.Categoria,d.idProceso,d.estado FROM documento d JOIN categoria c ON d.idCategoria=c.idCategoria WHERE d.idProceso=idProceso AND d.idDocumento=idDocumento;
     END IF;
 ELSE #Contribuyente (Secretaria o Profesor)
 	IF idDocumento<=0 THEN #Consulta general por estado activo
-    	SELECT * FROM documento d WHERE d.idProceso=idProceso AND d.estado=1;
+    	SELECT d.idDocumento,d.nombre,d.varsion,d.vigencia,d.poseedor,d.tiempo_retencion,d.nombre_file,c.Categoria,d.idProceso,d.estado FROM documento d JOIN categoria c ON d.idCategoria=c.idCategoria WHERE d.idProceso=idProceso AND d.estado=1;
     ELSE#Consulta especifica por estado activo
-    	SELECT * FROM documento d WHERE d.idProceso=idProceso AND d.idDocumento=idDocumento AND d.estado=1;
+    	SELECT  d.idDocumento,d.nombre,d.varsion,d.vigencia,d.poseedor,d.tiempo_retencion,d.nombre_file,c.Categoria,d.idProceso,d.estado FROM documento d JOIN categoria c ON d.idCategoria=c.idCategoria WHERE d.idProceso=idProceso AND d.idDocumento=idDocumento AND d.estado=1;
     END IF;
 END IF;
 
@@ -126,7 +126,6 @@ ELSE #Contribuyente
 SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
 END IF;
 ELSE
-#consulta de procesos o sub procesos, falta la validacion del tipo de ususario.
 IF  TipoUser=1 THEN#Administrador
 SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc;
 else#Contribuyente
@@ -295,7 +294,16 @@ CREATE TABLE `documento` (
 
 INSERT INTO `documento` (`idDocumento`, `nombre`, `varsion`, `vigencia`, `poseedor`, `proteccion`, `tiempo_retencion`, `nombre_file`, `idCategoria`, `idProceso`, `estado`) VALUES
 (5, 'segundo documento', '2', '2018-01-13', 'digo', 'magda', '', 'Piano1.pdf', 2, 10, 1),
-(6, 'Primer documento', '1', '0000-00-00', 'Diego', 'Magda', '-', 'mayito-partes4.pdf', 2, 6, 0);
+(6, 'Primer documento', '1', '0000-00-00', 'Diego', 'Magda', '-', 'mayito-partes4.pdf', 5, 6, 1),
+(7, 'Segundo documento', '2', '2018-05-21', 'Diego alejandro', 'alejandro', '-', 'Material_educativo_para_la_Elaboración_Manual_de_Usuario_Ver_2.pdf', 5, 6, 1),
+(8, 'Tercer documento', '3', '2018-05-21', 'Diego alejandro', 'alejandra', '-', '1+Gui?a+de+Inscripcio?n+a+los+programas+del+departamento+de+mu?sica+2018-1.pdf', 2, 6, 1),
+(9, 'Tercer documento', '4', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'apuntesPHP.pdf', 5, 6, 1),
+(10, 'quinto Documento', '4', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'apuntesPHP1.pdf', 5, 6, 1),
+(11, 'sexto documento', '6', '2018-05-21', 'Diego alejandro', 'alejandro', '-', 'Material_educativo_para_la_Elaboración_Manual_de_Usuario_Ver_21.pdf', 4, 6, 1),
+(12, 'Segundo documento', '7', '2018-05-21', 'Diego alejandro', 'alejandro', '-', 'apuntesPHP2.pdf', 5, 6, 1),
+(13, 'quinto Documento', '2', '2018-05-21', 'Diego alejandro', 'alejandro', '-', 'elalcaravan_gg_partes12_Saxofon_baritono.pdf', 7, 6, 1),
+(14, 'decimo documento', '2', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'elalcaravan_gg_partes06_Clarinete_en_Bb_2.pdf', 5, 6, 1),
+(15, 'decimo documento', '2', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'elalcaravan_gg_partes06_Clarinete_en_Bb_21.pdf', 5, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -448,7 +456,7 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `documento`
 --
 ALTER TABLE `documento`
-  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `historial`

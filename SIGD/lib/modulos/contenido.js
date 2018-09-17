@@ -106,8 +106,9 @@ function registrarModificarInformacionDocumento(datos) {
 			// mostrar el sweet Alert
 			if (dato==1) {
 			    $modal2.modal('hide');
-			    console.log(dato);
-			    console.log(datos.idD);
+			    // console.log(dato);
+			    // console.log(datos.idD);
+			    consultarDocumentos(0,datos.idProceso);
 				swal('Realizado!','El documiento fue cargado correctamente.','success',{buttons:false,timer:2000});		
 			}
 		}
@@ -206,12 +207,9 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 			$(this).empty();
 		});
 		localStorage.setItem('Contenido',idCon);
-		localStorage.setItem('idTipoP',(idTipoP+1));
-		// Hasta acá se llego el 06/09/2018
-		$.post(baseurl+'cContenido/documentos',{idDoc:0,idPro:idCon}, function(data) {
-			console.log(data);
-			$('#contenido').append(data);//Hasta acá se llego el 14/09/2018
-		});
+        localStorage.setItem('idTipoP',(idTipoP+1));
+		// ...
+		consultarDocumentos(0,idCon);//Id del documento y id del contenido
 		// Mostrar modal de documentos...
 	}else{
 		// Consultar contenedores
@@ -222,6 +220,36 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 		// <a href="">Gestion</a>><a href="">Proceso</a>><a href="">Sub-Proceso</a>
 		consultarContenidos((idTipoP+1),idCon);
 	}
+}
+
+function consultarDocumentos(idDoc,idCon) {
+	$.post(baseurl+'cContenido/documentos',{idDoc:0,idPro:idCon}, function(data) {
+		$('#contenido').empty();
+		// 
+		$('#contenido').append(data);
+		// 
+			$('#dataTableDocumentos').DataTable({
+				responsive: true,
+				"columns": [
+				  {"width": "40%"},
+				  {"width": "20%"},
+				  {"width": "10%"},
+				  {"width": "10%"},
+				  {"width": "35%"}
+				]
+			});
+
+	});
+}
+
+function cambiarEstado(idD) {
+	$.post(baseurl+'cDocumento/cambiarEstadoDocumento', {idD:idD}, function(data) {
+		if (data==1) {
+			swal('','','',{buttons:false,timer:2000});
+		}else{
+			swal('','','',{buttons:false,timer:2000});
+		}
+	});
 }
 
 function consultarContenidos(tipo,idcon) {//ID Tipo proceso y ID del proceso
@@ -259,7 +287,6 @@ function consultarContenidos(tipo,idcon) {//ID Tipo proceso y ID del proceso
 			                                    (tipo==1?'<div>'+
 			                                        '<!-- Editar -->'+
 			                                        '<a href="" data-toggle="tooltip" data-placement="top" title="Editar" onclick="mostrarModalEditar('+item.idProceso+','+item.idProceso_sub+',\''+item.nombre_proceso+'\',event)" class="modificar" data-idcon="'+item.idProceso+'" data-idproc="'+item.idProceso_sub+'"><span><i class="fas fa-edit" style="color: #0048A2; width: 30; "></i></span></a>'+
-			                                        '<!-- Cambiar estado esta pendiente por hacer -->'+
 			                                        // Clasificar el estado del boron
 			                                        '<a href="" data-toggle="tooltip" data-placement="top" title="'+(item.estado_visibilidad==1?'Visible':'No visible')+'" onclick="cambiarEstadoContenido('+item.idProceso+','+item.idProceso_sub+',event)" class="cambiarEstado" data-idcon="'+item.idProceso+'" data-idproc="'+item.idProceso_sub+'"><span><i '+(item.estado_visibilidad==1?'class="fas fa-eye " style="color:#12FF00; width: 30;"':'class="fas fa-eye-slash" style="color:#FF0000; width: 30;"')+'></i></span></a>'+
 			                                    '</div>':'<br>')+

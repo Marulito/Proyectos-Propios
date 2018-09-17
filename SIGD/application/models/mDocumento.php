@@ -28,5 +28,14 @@ class mDocumento extends CI_model
 
 		return $result;
 	}
+
+	public function cambiarEstadoDocumentoM($idD)
+	{
+		$query= $this->db->query("CALL ({$idD});");
+
+		$result=$query->row();
+
+		return $result->respuesta;
+	}
 }
  ?>

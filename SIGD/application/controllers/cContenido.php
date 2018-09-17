@@ -34,6 +34,7 @@ class cContenido extends CI_Controller
 		$info['tipo_ususario'] =$this->session->userdata('tipo_Usuario');
 
 		$dato['Documentos']= $this->mDocumento->consultarDocumentosM($info);
+		$dato['tipo_ususario']=$this->session->userdata('tipo_Usuario');
 
 		$view= $this->load->view('layout/documentos',$dato);
 
