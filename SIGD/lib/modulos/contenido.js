@@ -10,12 +10,10 @@ var $PosicionActual=$('#direccionamiento');
 $(document).ready(function($) {
 	// Consultar Contenidos
 	consultarContenidos(localStorage.getItem('idTipoP'),localStorage.getItem('Contenido'));//ID tipo proceso e ID Contendio
-
 	//Registrar o Modificar Documentos
 	$('#formularioDoc').submit(function(event) {//Validacion de campos
 		event.preventDefault();
 		// Validar formulario esta pendiente
-		// var data = new FormData(this);
 		// console.log(data);
 		if ($('#userfile').val()=='') {
 			console.log('Porfavor carga un documento');
@@ -61,6 +59,7 @@ $(document).ready(function($) {
 		if (localStorage.getItem('idTipoP')==4) {
 			// Documentos
 			$modal2.modal('show');
+			$('#formularioDoc').trigger('reset');
 			$('#accionar').val('0');
 		}else{
 			// Carpetas
@@ -92,6 +91,32 @@ $(document).ready(function($) {
 	}
 });
 
+function ediarDocumento(idD) {
+	consultarDocumentos(idD,localStorage.getItem('Contenido'),1);
+	$modal2.modal('show');
+	$('#accionar').val(idD);
+}
+// Esto esta pendiente por realizar
+function download(element) {
+	// console.log($(element).data('idd'));
+	$.ajax({
+		url: baseurl+'cDocumento/descargarDocumento',
+		type: 'POST',
+		data: {
+			idD: $(element).data('idd'),
+			idP: localStorage.getItem('Contenido')
+		},
+	})
+	.done(function(data) {
+		console.log(data);
+		console.log("success");
+	})
+	.fail(function(data) {
+		console.log(data);
+		console.log("error");
+	});
+}
+
 function registrarModificarInformacionDocumento(datos) {
 	$.ajax({
 		url:  baseurl+'cDocumento/registrarModificarInformacionDocumento',
@@ -106,9 +131,10 @@ function registrarModificarInformacionDocumento(datos) {
 			// mostrar el sweet Alert
 			if (dato==1) {
 			    $modal2.modal('hide');
+			    $('#formularioDoc').trigger('reset');
 			    // console.log(dato);
 			    // console.log(datos.idD);
-			    consultarDocumentos(0,datos.idProceso);
+			    consultarDocumentos(0,datos.idProceso,0);
 				swal('Realizado!','El documiento fue cargado correctamente.','success',{buttons:false,timer:2000});		
 			}
 		}
@@ -209,7 +235,7 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 		localStorage.setItem('Contenido',idCon);
         localStorage.setItem('idTipoP',(idTipoP+1));
 		// ...
-		consultarDocumentos(0,idCon);//Id del documento y id del contenido
+		consultarDocumentos(0,idCon,0);//Id del documento y id del contenido
 		// Mostrar modal de documentos...
 	}else{
 		// Consultar contenedores
@@ -222,34 +248,55 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 	}
 }
 
-function consultarDocumentos(idDoc,idCon) {
-	$.post(baseurl+'cContenido/documentos',{idDoc:0,idPro:idCon}, function(data) {
-		$('#contenido').empty();
-		// 
-		$('#contenido').append(data);
-		// 
+function consultarDocumentos(idDoc,idCon,acc) {//acc= 0 general, 1=editar y 2=descarga
+	$.post(baseurl+'cContenido/documentos',{idDoc:0,idPro:idCon, accion: acc}, function(data) {
+		if (acc==0) {
+			$('#contenido').empty();
+			// 
+			$('#contenido').append(data);
+
 			$('#dataTableDocumentos').DataTable({
 				responsive: true,
 				"columns": [
-				  {"width": "40%"},
-				  {"width": "20%"},
-				  {"width": "10%"},
-				  {"width": "10%"},
-				  {"width": "35%"}
+				    {"width": "40%"},
+				    {"width": "20%"},
+					{"width": "10%"},
+				    {"width": "10%"},
+				    {"width": "35%"}
 				]
 			});
+		 	// ...
+		    $('#contenedor').show('fast');
+		}else if(acc==1){
+			// Llenar los campos del formulario
 
+		}
+		// 
 	});
 }
 
 function cambiarEstado(idD) {
-	$.post(baseurl+'cDocumento/cambiarEstadoDocumento', {idD:idD}, function(data) {
-		if (data==1) {
-			swal('','','',{buttons:false,timer:2000});
-		}else{
-			swal('','','',{buttons:false,timer:2000});
-		}
-	});
+	// Mensaje de confirmación
+	swal({
+      title: "¿Estas seguro?",
+      text: 'Se cambiara el estado del documento',
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((result) => {
+    	// Confirmo
+    	if (result) {
+    		$.post(baseurl+'cDocumento/cambiarEstadoDocumento', {idD:idD}, function(data) {
+    			if (data==1) {
+    				swal('Realizado','El cambio de estado fue realizado correctamente','success',{buttons:false,timer:2000});
+    				consultarDocumentos(0,localStorage.getItem('Contenido'),0);
+    			}else{
+    				swal('Alerta','El estado no se actualizo','warning',{buttons:false,timer:2000});
+    			}
+    		});
+    	}
+    	// ...
+    });
 }
 
 function consultarContenidos(tipo,idcon) {//ID Tipo proceso y ID del proceso

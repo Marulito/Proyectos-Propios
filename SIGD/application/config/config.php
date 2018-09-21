@@ -13,7 +13,7 @@
 | WARNING: You MUST set this value!
 |
 | If it is not set, then CodeIgniter will try guess the protocol and path
-| your installation, but due to security concerns the hostname will be set
+| your installation, but due to security concerns the hostname will be setcookie(name)
 | to $_SERVER['SERVER_ADDR'] if available, or localhost otherwise.
 | The auto-detection mechanism exists only for convenience during
 | development and MUST NOT be used in production!
@@ -22,7 +22,7 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost:90/Proyectos-Propios/SIGD/';
+$config['base_url'] = 'http://localhost:9090/Proyectos-Propios/SIGD/';
 
 /*
 |--------------------------------------------------------------------------

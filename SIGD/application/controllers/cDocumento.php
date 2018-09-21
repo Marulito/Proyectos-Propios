@@ -9,6 +9,8 @@ class cDocumento extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('mDocumento');
+		// $this->load->library('donwload');
+		$this->load->helper('download');
 	}
 
 // Crear un .htaccess que se encargue esta configuracion o ir a cambiar los valores en php.ini
@@ -60,6 +62,24 @@ class cDocumento extends CI_Controller
 		$res= $this->mDocumento->cambiarEstadoDocumentoM($id);
 
 		echo $res;
+	}
+	// Descargar los documentos queda pendiente
+	public function descargarDocumento()
+	{	
+		// ...
+		$info['idDocumento']= $this->input->post('idD');
+		$info['idProceso']= $this->input->post('idP');
+		$info['tipo_ususario']= $this->session->userdata('tipo_Usuario');
+		$info['accion']= 2;
+		// ...
+		$name=$this->mDocumento->consultarDocumentosM($info);
+		// var_dump(base_url().'lib/uploads/'.$name);
+		// Descargar archivo
+		$data= file_get_contents('./lib/uploads/'.$name);
+		// var_dump($data);
+		force_download($name,$data);
+		// ...
+		// echo $data;
 	}
 
 	// public function do_upload()//Primero subir el documento y despues registrar la descripción por manera más segura

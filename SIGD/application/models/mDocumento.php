@@ -23,15 +23,25 @@ class mDocumento extends CI_model
 	public function consultarDocumentosM($info)
 	{
 		$query= $this->db->query("CALL PA_ConsultarDocumentos({$info['idDocumento']}, {$info['tipo_ususario']} ,{$info['idProceso']});");
-
-		$result=$query->result();
-
-		return $result;
+		// ...
+		switch ($info['accion']) {
+			case 0://Consulta general
+			case 1://Consultar info editar documento
+				  $result=$query->result();
+				  // ...
+				  return $result;
+			    break;
+			case 2://Consultar name_file para descargar
+			      $result=$query->row();
+			      // ...
+			      return $result->nombre_file;		
+				break;
+		}
 	}
 
 	public function cambiarEstadoDocumentoM($idD)
 	{
-		$query= $this->db->query("CALL ({$idD});");
+		$query= $this->db->query("CALL PA_CambiarEstadoDocumento({$idD});");
 
 		$result=$query->row();
 
