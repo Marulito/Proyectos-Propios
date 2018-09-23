@@ -67,19 +67,80 @@ class cDocumento extends CI_Controller
 	public function descargarDocumento()
 	{	
 		// ...
-		$info['idDocumento']= $this->input->post('idD');
+		$info['idDocumento']= $this->input->post('idDoc');
 		$info['idProceso']= $this->input->post('idP');
 		$info['tipo_ususario']= $this->session->userdata('tipo_Usuario');
+		$info['accion']= 2;
+		// ...
+		$name=$this->mDocumento->consultarDocumentosM($info);
+		// Descargar archivo
+		echo $name;
+		//...
+	}
+
+	public function download()
+	{
+		$this->load->helper('download');//No se puede utilizar con ajax
+		// ...
+		$name=$_GET['name'];
+		$idHistorial=$_GET['historial'];
+		// var_dump(base_url().'lib/uploads/'.$name);
+		// Descargar archivo
+		if ($this->verificarDescarga($idHistorial)<=15) {//Segundos
+			# code...
+		  $data= file_get_contents('./lib/uploads/'.$name);
+		  // // var_dump($data);
+		  force_download($name,$data);
+		}else{
+			echo "No se puede descargar este documento";
+		}
+	}
+
+	public function verificarDescarga($idH)
+	{
+		$res= $this->mDocumento->verificarDescargaM($idH);
+
+		return $res;
+	}
+
+	public function validarUsusario()
+	{	
+
+		$info['user']= $this->session->userdata('documento');
+		$info['pass']= $this->input->post('pass');
+		$info['idD']= $this->input->post('idD');
+
+		$res= $this->mDocumento->validarUsuarioM($info);
+
+		echo $res;
+
+	}
+
+
+
+	public function descargarDocumento1()
+	{
+		$this->load->helper('download');//No se puede utilizar con ajax
+		// ...
+		$info['idDocumento']= 14;
+		$info['idProceso']= 6;
+		$info['tipo_ususario']= 1;
 		$info['accion']= 2;
 		// ...
 		$name=$this->mDocumento->consultarDocumentosM($info);
 		// var_dump(base_url().'lib/uploads/'.$name);
 		// Descargar archivo
 		$data= file_get_contents('./lib/uploads/'.$name);
-		// var_dump($data);
+		// // var_dump($data);
 		force_download($name,$data);
-		// ...
-		// echo $data;
+		// header("Cache-Control: public");
+		// header("Content-Description: File Transfer");
+		// header("Content-Disposition: attachment; filename=$name");
+		// header("Content-Type: application/zip");
+		// header("Content-Transfer-Encoding: binary");
+		    
+		// Read the file
+		// readfile(base_url().'/lib/uploads/'.$name);
 	}
 
 	// public function do_upload()//Primero subir el documento y despues registrar la descripción por manera más segura

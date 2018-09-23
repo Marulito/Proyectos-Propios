@@ -31,6 +31,17 @@ class cLogin extends CI_Controller
 		echo $res;
 	}
 
+	public function tiempoInactividad()
+	{//Esto esta pendiente
+		$mensaje=1;
+		if ($this->session->userdata('tipo_Usuario')==null) {
+			redirect('cLogin/index', 'refresh');
+			// $mensaje=0;
+
+		}
+		// echo $mensaje;
+	}
+
 	public function recuperarRol()
 	{
 		echo $this->session->userdata('tipo_Usuario');

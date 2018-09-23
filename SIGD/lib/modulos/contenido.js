@@ -1,3 +1,5 @@
+//Pendiente realizar el actualizar documentos
+
 // variables idCon=ID del proceso y idProc=ID del sub-proceso > tabla de proceso
 var $name=$('#nombreC');
 var $btnAccion1= $('#accionar');//Registrar cuando no tiene atributos data es registrar pero cuando si los tiene es modificar
@@ -17,6 +19,7 @@ $(document).ready(function($) {
 		// console.log(data);
 		if ($('#userfile').val()=='') {
 			console.log('Porfavor carga un documento');
+			// swal('','','',{buttons: false, timer:2000});
 		}else{
 			// cargar el documento
 			$.ajax({
@@ -49,6 +52,25 @@ $(document).ready(function($) {
 		}
 	});
 
+	$('#accionarDescarga').click(function() {
+		event.preventDefault();
+		if ($('#contraseñaD').val()!='') {
+			validarUsuario($('#contraseñaD').val(),$('#accionarDescarga').val());
+		}else{
+			// Mensaje de alerta, el campo no puede estar vacio
+			swal('Alerta','Debes ingresar tu contraseña','warning',{buttons:false,timer:2000});
+		}
+	});
+
+	// Limpiar link de direecion del documento en el sistema de documentacion
+	$('#contenidoG').on('click', function(event) {
+		event.preventDefault();
+		$PosicionActual.children('a').hide('fast', function () {
+			 $(this).remove();
+			 $PosicionActual.empty(); 
+		});
+	});
+
 	// Mostrar modal Registrar
 	$('#agregar').click(function(event) {
 		$btnAccion1.text('Registrar');
@@ -59,6 +81,7 @@ $(document).ready(function($) {
 		if (localStorage.getItem('idTipoP')==4) {
 			// Documentos
 			$modal2.modal('show');
+			$('#nameFile').hide('fast');
 			$('#formularioDoc').trigger('reset');
 			$('#accionar').val('0');
 		}else{
@@ -91,31 +114,61 @@ $(document).ready(function($) {
 	}
 });
 
-function ediarDocumento(idD) {
+function editarDocumento(idD) {
 	consultarDocumentos(idD,localStorage.getItem('Contenido'),1);
 	$modal2.modal('show');
 	$('#accionar').val(idD);
 }
 // Esto esta pendiente por realizar
-function download(element) {
-	// console.log($(element).data('idd'));
-	$.ajax({
-		url: baseurl+'cDocumento/descargarDocumento',
-		type: 'POST',
-		data: {
-			idD: $(element).data('idd'),
-			idP: localStorage.getItem('Contenido')
-		},
-	})
-	.done(function(data) {
-		console.log(data);
-		console.log("success");
-	})
-	.fail(function(data) {
-		console.log(data);
-		console.log("error");
+// function download(element) {
+// 	// console.log($(element).data('idd'));
+// 	$.ajax({
+// 		url: baseurl+'cDocumento/descargarDocumento',
+// 		type: 'POST',
+// 		data: {
+// 			idD: $(element).data('idd'),
+// 			idP: localStorage.getItem('Contenido')
+// 		},
+// 	})
+// 	.done(function(data) {
+// 		console.log(data);
+// 		console.log("success");
+// 	})
+// 	.fail(function(data) {
+// 		console.log(data);
+// 		console.log("error");
+// 	});
+// }
+
+function modalD(valor) {
+	$('#accionarDescarga').val(valor);
+	$('#confirmarDescarga').modal('show');
+}
+
+function validarUsuario(password,idD) {
+	$.post(baseurl+'cDocumento/validarUsusario', {pass: password,idD:idD}, function(data) {
+		if (data>0) {
+			download(idD,data);
+		}else{
+			swal('Alerta','La contraseña es incorrecta','warning',{buttons:false,timer:2000});
+		}
 	});
 }
+
+function download(idD,historial) {//Mejorar la seguridad de este metodo
+	// Limpiar los XHR
+	$.post(baseurl+'cDocumento/descargarDocumento', {idDoc: idD, idP: localStorage.getItem('Contenido')}, function(data) {
+		if (data!='') {
+		  window.open(baseurl+'cDocumento/download?name='+data+'&historial='+historial);
+		  $('#confirmarDescarga').modal('hide');
+		}
+	});
+}
+
+// $('.documentos').click(function(event) {
+// 	event.preventDefault();
+// 	console.log('igreso');
+// });
 
 function registrarModificarInformacionDocumento(datos) {
 	$.ajax({
@@ -151,6 +204,11 @@ function accionLicnk(event,elemento) {
 	localStorage.setItem('Contenido',$(elemento).data('idcon'));
 	localStorage.setItem('idTipoP',($(elemento).data('idtipo')));
 	consultarContenidos($(elemento).data('idtipo'),$(elemento).data('idcon'));
+	// Retirar pos
+	$PosicionActual.children('a').eq($(elemento).data('pos')-1).next('a').hide('fast', function() {
+		$(this).remove();
+	});
+
 }
 
 // Mostrar modal editar Contenido
@@ -241,7 +299,7 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 		// Consultar contenedores
 		localStorage.setItem('Contenido',idCon);
 		localStorage.setItem('idTipoP',(idTipoP+1));
-		$PosicionActual.append('<a href="" onclick="accionLicnk(event,this);" data-idcon="'+idCon+'" data-idtipo="'+(idTipoP+1)+'">'+nombre+'</a>>');
+		$PosicionActual.append('<a href="" data-pos="'+($PosicionActual.children('a').length+1)+'" onclick="accionLicnk(event,this);" data-idcon="'+idCon+'" data-idtipo="'+(idTipoP+1)+'">'+nombre+'></a>');
 		// Guardar El nombre!!
 		// <a href="">Gestion</a>><a href="">Proceso</a>><a href="">Sub-Proceso</a>
 		consultarContenidos((idTipoP+1),idCon);
@@ -249,12 +307,12 @@ function cambiarContenidoVista(idTipoP,idCon,event,nombre) {
 }
 
 function consultarDocumentos(idDoc,idCon,acc) {//acc= 0 general, 1=editar y 2=descarga
-	$.post(baseurl+'cContenido/documentos',{idDoc:0,idPro:idCon, accion: acc}, function(data) {
+	$.post(baseurl+'cContenido/documentos',{idDoc:idDoc,idPro:idCon, accion: acc}, function(data) {
 		if (acc==0) {
 			$('#contenido').empty();
 			// 
 			$('#contenido').append(data);
-
+			// 
 			$('#dataTableDocumentos').DataTable({
 				responsive: true,
 				"columns": [
@@ -269,7 +327,22 @@ function consultarDocumentos(idDoc,idCon,acc) {//acc= 0 general, 1=editar y 2=de
 		    $('#contenedor').show('fast');
 		}else if(acc==1){
 			// Llenar los campos del formulario
+			var result= JSON.parse(data);
+			// console.log(data);
+			$.each(result,function(index, row) {
 
+			  $('#version').val(row.ver);
+			  $('#nombreD').val(row.nombre);
+			  $('#categoria').children('option[value="'+row.idCategoria+'"]').prop('selected', true);
+			  $('#vigencia').val(row.vigencia);
+			  $('#poseedor').val(row.poseedor);
+			  $('#proteccion').val(row.proteccion);
+			  // $('#userfile').val(row.nombre_file);
+			  $('#nameFile').show('fast');
+			  $('#nombreFile').text(row.nombre_file);
+			  $('#accionarDocumentos').text('Modificar');
+			  $('#accionarDocumentos').val(row.idDocumento);
+			});
 		}
 		// 
 	});

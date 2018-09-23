@@ -32,4 +32,4 @@
     <![endif]-->
 
 </head>
-<body oncontextmenu="return false">
+<body oncontextmenu="return false" onload="nobackbutton();">

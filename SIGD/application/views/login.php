@@ -14,7 +14,7 @@
                                     <input class="form-control" placeholder="Numero de documento" name="user" type="text" autofocus autocomplete="false" id="user">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Contraseña" name="password" type="password" value="" autocomplete="false" id="password">
+                                    <input class="form-control" placeholder="Contraseña" name="password" type="password" value="" autocomplete="off" id="password">
                                 </div>
                                 <!--<div class="checkbox">
                                     <label>

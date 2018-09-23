@@ -32,14 +32,23 @@ class cContenido extends CI_Controller
 		$info['idDocumento'] = $this->input->post('idDoc');;//0=Consulta todos en general, n>0 consulta los datos del documento por el idDocumento
 		$info['idProceso'] = $this->input->post('idPro');// Que documentos va a buscar...
 		$info['tipo_ususario'] =$this->session->userdata('tipo_Usuario');
-		$info['accion'] =$this->session->userdata('accion');
+		// $info['accion'] =$this->session->userdata('accion');
+		$info['accion'] =$this->input->post('accion');
 
 		$dato['Documentos']= $this->mDocumento->consultarDocumentosM($info);
-		$dato['tipo_ususario']=$this->session->userdata('tipo_Usuario');
+		// 
+		if ($info['accion']==0) {//Consulta en general
+			// 
+			$dato['tipo_ususario']=$this->session->userdata('tipo_Usuario');
+			// 
+			$view= $this->load->view('layout/documentos',$dato);
 
-		$view= $this->load->view('layout/documentos',$dato);
-
-		echo $view;
+			echo $view;
+		}else if ($info['accion']==1) {//Consultar info por un id de documento
+			echo json_encode($dato['Documentos']);
+		}else{
+			echo "vacio";
+		}
 	}
 
 	public function registrarModificarContenido()

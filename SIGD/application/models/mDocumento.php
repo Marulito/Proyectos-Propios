@@ -20,6 +20,24 @@ class mDocumento extends CI_model
 		return $res->respuesta;
 	}
 
+	public function validarUsuarioM($info)
+	{
+		$query= $this->db->query("CALL PA_validarUsuario('{$info['user']}','{$info['pass']}',{$info['idD']});");
+
+		$res=$query->row();
+
+		return $res->respuesta;
+	}
+
+	public function verificarDescargaM($idH)
+	{
+		$query= $this->db->query("CALL PA_validarDescarga({$idH});");
+
+		$res=$query->row();
+
+		return $res->respuesta;
+	}
+
 	public function consultarDocumentosM($info)
 	{
 		$query= $this->db->query("CALL PA_ConsultarDocumentos({$info['idDocumento']}, {$info['tipo_ususario']} ,{$info['idProceso']});");
