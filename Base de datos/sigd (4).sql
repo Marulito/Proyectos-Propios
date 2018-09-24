@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-09-2018 a las 01:54:13
--- Versión del servidor: 10.1.31-MariaDB
--- Versión de PHP: 7.2.3
+-- Tiempo de generación: 24-09-2018 a las 23:16:22
+-- Versión del servidor: 10.1.29-MariaDB
+-- Versión de PHP: 7.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -136,18 +136,26 @@ BEGIN
 #Consulta de gestiones
 IF TipoUser=1 THEN #Administrador
 
-	IF idTipo=3 THEN
-    	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo;
-    ELSE
-   		SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo; 
+  IF idProc=0 THEN#Consulta general
+	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=1;
+  ELSE
+	IF idTipo=3 THEN#Consulta cantidad de documentos
+    	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc;
+    ELSE#Consulta los procesos 2 y 3
+   		SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc; 
     END IF;
+  END IF;
 
 ELSE #Contribuyente
 
-	IF idTipo=3 THEN#Consulta La camtidad de documentos que tiene un sub-proceso
-    	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso AND d.estado=1) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
+     IF idProc=0 THEN
+	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=1 AND p.estado_visibilidad=1;
     ELSE
-    	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso AND pc.estado_visibilidad=1) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
+      IF idTipo=3 THEN#Consulta La camtidad de documentos que tiene un sub-proceso
+    	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso AND d.estado=1) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc AND p.estado_visibilidad=1;
+      ELSE
+    	SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso AND pc.estado_visibilidad=1) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc AND p.estado_visibilidad=1;
+      END IF;
     END IF;
     
 END IF;
@@ -353,7 +361,8 @@ INSERT INTO `documento` (`idDocumento`, `nombre`, `varsion`, `vigencia`, `poseed
 (13, 'quinto Documento', '2', '2018-05-21', 'Diego alejandro', 'alejandro', '-', 'elalcaravan_gg_partes12_Saxofon_baritono.pdf', 7, 6, 1),
 (14, 'decimo documento', '2', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'elalcaravan_gg_partes06_Clarinete_en_Bb_2.pdf', 5, 6, 0),
 (15, 'decimo documento', '2', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'elalcaravan_gg_partes06_Clarinete_en_Bb_21.pdf', 5, 6, 0),
-(16, 'Ultimo documento de prueba', '7', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'Comunicado_3_-_Recordatorio_del_buen_uso_de_los_bienes_y_servicios_(1).pdf', 2, 6, 1);
+(16, 'Ultimo documento de prueba', '7', '2018-05-21', 'Diego alejandro', 'alejandra', '-', 'Comunicado_3_-_Recordatorio_del_buen_uso_de_los_bienes_y_servicios_(1).pdf', 2, 6, 1),
+(17, 'asdasdasd', 'asd', '0000-00-00', 'asdasdasd', 'asdasasdas', '-', 'mayito-partes5.pdf', 2, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -379,7 +388,9 @@ INSERT INTO `historial` (`idHistorial`, `fechaHora_descarga`, `idDocumento`, `do
 (4, '2018-09-23 18:47:18', 10, '98113053240'),
 (5, '2018-09-23 18:52:47', 10, '98113053240'),
 (6, '2018-09-23 18:53:07', 13, '98113053240'),
-(7, '2018-09-23 18:53:27', 16, '98113053240');
+(7, '2018-09-23 18:53:27', 16, '98113053240'),
+(8, '2018-09-24 06:35:09', 10, '98113053240'),
+(9, '2018-09-24 06:35:40', 10, '98113053240');
 
 -- --------------------------------------------------------
 
@@ -520,13 +531,13 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `documento`
 --
 ALTER TABLE `documento`
-  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `historial`
 --
 ALTER TABLE `historial`
-  MODIFY `idHistorial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idHistorial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `proceso`

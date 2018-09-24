@@ -78,6 +78,11 @@ class cDocumento extends CI_Controller
 		//...
 	}
 
+	public function deletDocument()
+	{
+		
+	}
+
 	public function download()
 	{
 		$this->load->helper('download');//No se puede utilizar con ajax

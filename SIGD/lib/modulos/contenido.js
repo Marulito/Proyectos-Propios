@@ -17,38 +17,55 @@ $(document).ready(function($) {
 		event.preventDefault();
 		// Validar formulario esta pendiente
 		// console.log(data);
-		if ($('#userfile').val()=='') {
-			console.log('Porfavor carga un documento');
-			// swal('','','',{buttons: false, timer:2000});
-		}else{
-			// cargar el documento
-			$.ajax({
-				url: baseurl+'cDocumento/do_upload',
-				type: 'POST',
-				data: new FormData(this),
-				contentType: false,
-				cache: false,
-				processData: false,
-				success:function (data) {
-					console.log(data);
-					if (data!='') {
-						registrarModificarInformacionDocumento({
-							nombre: $('#nombreD').val(),
-							categoria: $('#categoria').children('option:selected').val(),
-							vigencia: $('#vigencia').val(),
-							poseedor: $('#poseedor').val(),
-							version: $('#version').val(),
-							proteccion: $('#proteccion').val(),
-							namePDF: data,
-							idD: $('#accionar').val(),//0=Registrar y n>0=Modificar
-							idProceso: localStorage.getItem('Contenido')//Variable del localStorage no quiero depender 100% de ella
-						});
+		if ($('#accionarDocumentos').val()==0) {//Registrar
+			if ($('#userfile').val()=='') {
+				// console.log('Porfavor carga un documento');
+				swal('Alerta','Porfavor Carga un documento','warning',{buttons: false, timer:2000});
+			}else{
+				// cargar el documento
+				$.ajax({
+					url: baseurl+'cDocumento/do_upload',
+					type: 'POST',
+					data: new FormData(this),
+					contentType: false,
+					cache: false,
+					processData: false,
+					success:function (data) {
+						console.log(data);
+						if (data!='') {
+							accionarCodumento(data);
+						}
 					}
-				}
-			})
-			.fail(function() {
-				console.log("error");
-			});
+				})
+				.fail(function() {
+					console.log("error");
+				});
+			}
+		}else{//Actualizar
+		// console.log('Actualizar');
+			if ($('#userfile').val()=='') {
+				$.post(baseurl+'cDocumento/descargarDocumento', {idDoc: $('#accionarDocumentos').val(), idP: localStorage.getItem('Contenido')}, function(data) {
+					accionarCodumento(data);
+				});
+			}else{
+				$.ajax({
+					url: baseurl+'cDocumento/do_upload',
+					type: 'POST',
+					data: new FormData(this),
+					contentType: false,
+					cache: false,
+					processData: false,
+					success:function (data) {
+						console.log(data);
+						if (data!='') {
+							accionarCodumento(data);
+						}
+					}
+				})
+				.fail(function() {
+					console.log("error");
+				});
+			}
 		}
 	});
 
@@ -83,7 +100,7 @@ $(document).ready(function($) {
 			$modal2.modal('show');
 			$('#nameFile').hide('fast');
 			$('#formularioDoc').trigger('reset');
-			$('#accionar').val('0');
+			$('#accionarDocumentos').val('0');
 		}else{
 			// Carpetas
 			modificarModal();
@@ -114,10 +131,30 @@ $(document).ready(function($) {
 	}
 });
 
+function accionarCodumento(name) {
+	registrarModificarInformacionDocumento({
+		nombre: $('#nombreD').val(),
+		categoria: $('#categoria').children('option:selected').val(),
+		vigencia: $('#vigencia').val(),
+		poseedor: $('#poseedor').val(),
+		version: $('#version').val(),
+		proteccion: $('#proteccion').val(),
+		namePDF: name,
+		idD: $('#accionarDocumentos').val(),//0=Registrar y n>0=Modificar
+		idProceso: localStorage.getItem('Contenido')//
+	});
+}
+
+function eliminarDocumento(name) {
+	$.post(baseurl+'cDocumento/deletDocument', {param1: 'value1'}, function(data, textStatus, xhr) {
+		/*optional stuff to do after success */
+	});
+}
+
 function editarDocumento(idD) {
 	consultarDocumentos(idD,localStorage.getItem('Contenido'),1);
 	$modal2.modal('show');
-	$('#accionar').val(idD);
+	$('#accionarDocumentos').val(idD);
 }
 // Esto esta pendiente por realizar
 // function download(element) {
@@ -178,7 +215,7 @@ function registrarModificarInformacionDocumento(datos) {
 		cache:false,
 		beforeSend:function () {
 			// Mostrar el cargando en la pantalla
-			$('#accionar').text('Enviando...');
+			$('#accionarDocumentos').text('Enviando...');
 		},
 		success:function (dato) {
 			// mostrar el sweet Alert
