@@ -80,7 +80,9 @@ class cDocumento extends CI_Controller
 
 	public function deletDocument()
 	{
-		
+		// Eliminar documento de la carpeta uploads
+		$name= $this->input->post('nombre');
+		unlink('./lib/uploads/'.$name);
 	}
 
 	public function download()

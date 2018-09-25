@@ -5,7 +5,7 @@
 
                 <div class="col-lg-12">
                     <!-- El boton solo lo mirara los administradores -->
-                    <h1 class="page-header"><a id="contenidoG" href="" onclick="accionLicnk(event,this);" data-idcon="0" data-idtipo="1"><?= $nombreT ?></a> <small id="direccionamiento"></small><button id="agregar" type="button" class="btn btn-outline btn-primary pull-right" value="<?=$opProceso?>">+</button></h1>
+                    <h1 class="page-header"><a id="contenidoG" href="" onclick="accionLicnk(event,this);" data-idcon="0" data-idtipo="1"><?= $nombreT ?></a> <small id="direccionamiento"></small><?= ($tipoUser==1?'<button id="agregar" type="button" class="btn btn-outline btn-primary pull-right" value="<?=$opProceso?>">+</button>':'') ?></h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -13,8 +13,6 @@
             <div id="contenido">
             <!-- Contenido de la pagina -->
             </div>
-            <!-- /.row -->
-
             <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->

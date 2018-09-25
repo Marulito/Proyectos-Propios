@@ -16,6 +16,7 @@ class cContenido extends CI_Controller
 	{	
 		$info['opProceso']=1;//1=Gestiones , 2=Procesos y 3=SubProcesos //Consultar los procesos
 		$info['nombreT']='Gestiones';
+		$info['tipoUser']=$this->session->userdata('tipo_Usuario');//Tipo de ususario
 		//Contenidos
 		$info['categorias']= $this->mCategoria->consultarCategoriasM(-1);
 		// ---

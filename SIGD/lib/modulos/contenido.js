@@ -43,10 +43,12 @@ $(document).ready(function($) {
 			}
 		}else{//Actualizar
 		// console.log('Actualizar');
+		  // $.post(baseurl+'cDocumento/descargarDocumento', {idDoc: $('#accionarDocumentos').val(), idP: localStorage.getItem('Contenido')}, function(oldName) {
 			if ($('#userfile').val()=='') {
-				$.post(baseurl+'cDocumento/descargarDocumento', {idDoc: $('#accionarDocumentos').val(), idP: localStorage.getItem('Contenido')}, function(data) {
-					accionarCodumento(data);
-				});
+				// ...
+		      $.post(baseurl+'cDocumento/descargarDocumento', {idDoc: $('#accionarDocumentos').val(), idP: localStorage.getItem('Contenido')}, function(oldName) {
+		  	     accionarCodumento(oldName);
+		      });	
 			}else{
 				$.ajax({
 					url: baseurl+'cDocumento/do_upload',
@@ -55,17 +57,21 @@ $(document).ready(function($) {
 					contentType: false,
 					cache: false,
 					processData: false,
-					success:function (data) {
-						console.log(data);
-						if (data!='') {
-							accionarCodumento(data);
-						}
+					success:function (newName) {
+						// console.log(data);
+							if (newName!='') {
+								$.post(baseurl+'cDocumento/descargarDocumento', {idDoc: $('#accionarDocumentos').val(), idP: localStorage.getItem('Contenido')}, function(oldName) {
+									eliminarDocumento(oldName);
+									accionarCodumento(newName);
+								});				
+							}
 					}
 				})
 				.fail(function() {
 					console.log("error");
 				});
 			}
+		  // });
 		}
 	});
 
@@ -146,8 +152,8 @@ function accionarCodumento(name) {
 }
 
 function eliminarDocumento(name) {
-	$.post(baseurl+'cDocumento/deletDocument', {param1: 'value1'}, function(data, textStatus, xhr) {
-		/*optional stuff to do after success */
+	$.post(baseurl+'cDocumento/deletDocument', {nombre: name}, function(data) {
+		console.log('Proceso terminado: '+data);
 	});
 }
 
@@ -219,13 +225,13 @@ function registrarModificarInformacionDocumento(datos) {
 		},
 		success:function (dato) {
 			// mostrar el sweet Alert
-			if (dato==1) {
+			if (dato==1 || dato==2) {
 			    $modal2.modal('hide');
 			    $('#formularioDoc').trigger('reset');
 			    // console.log(dato);
 			    // console.log(datos.idD);
 			    consultarDocumentos(0,datos.idProceso,0);
-				swal('Realizado!','El documiento fue cargado correctamente.','success',{buttons:false,timer:2000});		
+				swal('Realizado!',(dato==1?'El documiento fue cargado correctamente.':'El documento fue modificado correctamente'),'success',{buttons:false,timer:2000});		
 			}
 		}
 	}).fail(function(error) {
