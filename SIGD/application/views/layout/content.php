@@ -2,7 +2,6 @@
         <!-- Navigation --> 
         <div id="page-wrapper">
             <div class="row">
-
                 <div class="col-lg-12">
                     <!-- El boton solo lo mirara los administradores -->
                     <h1 class="page-header"><a id="contenidoG" href="" onclick="accionLicnk(event,this);" data-idcon="0" data-idtipo="1"><?= $nombreT ?></a> <small id="direccionamiento"></small><?= ($tipoUser==1?'<button id="agregar" type="button" class="btn btn-outline btn-primary pull-right" value="<?=$opProceso?>">+</button>':'') ?></h1>
@@ -17,7 +16,6 @@
         </div>
         <!-- /#page-wrapper -->
     </div>
-
     <!-- Modal de procesos -->
     <div class="modal fade" id="gestionarAccion">
         <div class="modal-dialog">
@@ -149,56 +147,3 @@
         </div>
     </div>
 </body>
-
-
-
-<!--     BEGIN
-#Consulta los procesos por el tipo de proceso
-# Consutar por el tipo de ususario
-
-IF idProc=0 THEN
-#Consulta de gestiones
-IF TipoUser=1 THEN #Administrador
-
-    IF idTipo=3 THEN
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo;
-    ELSE
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo; 
-    END IF;
-
-ELSE #Contribuyente
-
-    IF idTipo=3 THEN#Consulta La camtidad de documentos que tiene un sub-proceso
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
-    ELSE
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
-    END IF;
-    
-END IF;
-ELSE
-IF TipoUser=1 THEN #Administrador
-
-    IF idTipo=3 THEN
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo;
-    ELSE
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo; 
-    END IF;
-
-ELSE #Contribuyente
-
-    IF idTipo=3 THEN#Consulta La camtidad de documentos que tiene un sub-proceso
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM documento d WHERE d.idProceso=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
-    ELSE
-        SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT (COUNT(*)-1) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.estado_visibilidad=1;
-    END IF;
-    
-END IF;
-/*IF  TipoUser=1 THEN#Administrador
-SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc;
-else#Contribuyente
-SELECT p.idProceso,p.nombre_proceso,p.estado_visibilidad,p.idtipo_proceso,p.idProceso_sub,p.documento,(SELECT COUNT(*) FROM proceso pc WHERE pc.idProceso_sub=p.idProceso AND p.estado_visibilidad=1) AS cantidad FROM proceso p WHERE p.idtipo_proceso=idTipo AND p.idProceso_sub=idProc AND p.estado_visibilidad=1;*/
-
-
-END IF;
-
-END -->

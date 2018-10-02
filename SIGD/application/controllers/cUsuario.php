@@ -13,10 +13,16 @@ class cUsuario extends CI_Controller
 
 	public function index()
 	{
-		$this->load->view('layout/header');
-		$this->load->view('layout/navegacion');
-		$this->load->view('modulos/usuario');
-		$this->load->view('layout/footer');
+		if ($this->session->userdata('documento')==false) {
+			redirect('cLogin');
+		}else{
+			$info['tipoUser']= $this->session->userdata('tipo_Usuario');
+
+			$this->load->view('layout/header');
+			$this->load->view('layout/navegacion',$info);
+			$this->load->view('modulos/usuario');
+			$this->load->view('layout/footer');
+		}
 	}
 
 	public function registrarModificarUsuario()

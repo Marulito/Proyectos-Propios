@@ -13,7 +13,9 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="<?php echo base_url(); ?>lib/dist/js/sb-admin-2.js"></script>
-
+  
+    <!-- script Date Picker -->
+    <script src="<?php echo base_url(); ?>lib/js/bootstrap-datepicker.min.js"></script>
     <!-- Funciones Generales -->
     <!-- <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" data-auto-replace-svg="nest"></script> -->
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" integrity="sha256-l1iMQ6f0+8aFBzSNRxgklLlYMqu5S4b/LpaST2s+gog= sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy sha512-3dlGoFoY39YEcetqKPULIqryjeClQkr2KXshhYxFXNZAgRFZElUW9UQmYkmQE1bvB8tssj3uSKDzsj8rA04Meg==" crossorigin="anonymous"></script>
@@ -45,6 +47,19 @@
         }
         // Tool tips
         $('[data-toggle="tooltip"]').tooltip();
+        // DatePicker
+         $('.fh-date').datepicker({
+           format: "dd-mm-yyyy",
+           numberOfMonths: 3,
+           showButtonPanel: true,
+           minDate: -1//Validar que no permita el ingreso de fechas anteriores.
+           // todayBtn: "linked"
+        });
+        // Formato de fecha
+        function formatoFecha(fecha) {
+            var v = fecha.split('-');
+            return v[2] + '-' + v[1] + '-' + v[0];
+        }
     </script>
 
     <!-- Loguin -->
@@ -127,6 +142,12 @@
     <!-- Formulario de Categorias -->
     <?php if ($this->uri->segment(1) == 'cCategoria') {?>
         <script src="<?php echo base_url(); ?>lib/modulos/categoria.js"></script>
+        <!-- <script type="text/javascript">sessionExpirada();</script> -->
+    <?php }?>
+
+    <!-- Formulario de Categorias -->
+    <?php if ($this->uri->segment(1) == 'cHistorial') {?>
+        <script src="<?php echo base_url(); ?>lib/modulos/historial.js"></script>
         <!-- <script type="text/javascript">sessionExpirada();</script> -->
     <?php }?>
 

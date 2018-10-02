@@ -14,16 +14,20 @@ class cContenido extends CI_Controller
 
 	public function index()
 	{	
-		$info['opProceso']=1;//1=Gestiones , 2=Procesos y 3=SubProcesos //Consultar los procesos
-		$info['nombreT']='Gestiones';
-		$info['tipoUser']=$this->session->userdata('tipo_Usuario');//Tipo de ususario
-		//Contenidos
-		$info['categorias']= $this->mCategoria->consultarCategoriasM(-1);
-		// ---
-		$this->load->view('layout/header');
-		$this->load->view('layout/navegacion');
-		$this->load->view('layout/content',$info);
-		$this->load->view('layout/footer');
+		if ($this->session->userdata('documento')==false) {
+			redirect('cLogin');
+		}else{
+			$info['opProceso']=1;//1=Gestiones , 2=Procesos y 3=SubProcesos //Consultar los procesos
+			$info['nombreT']='Gestiones';
+			$info['tipoUser']=$this->session->userdata('tipo_Usuario');//Tipo de ususario
+			//Contenidos
+			$info['categorias']= $this->mCategoria->consultarCategoriasM(-1);
+			// ---
+			$this->load->view('layout/header');
+			$this->load->view('layout/navegacion',$info);
+			$this->load->view('layout/content',$info);
+			$this->load->view('layout/footer');
+		}		
 	}
 
 	public function documentos()

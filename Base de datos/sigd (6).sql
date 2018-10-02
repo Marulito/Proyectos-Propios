@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-09-2018 a las 18:32:57
+-- Tiempo de generación: 02-10-2018 a las 15:28:43
 -- Versión del servidor: 10.1.29-MariaDB
 -- Versión de PHP: 7.2.0
 
@@ -124,6 +124,26 @@ ELSE #Contribuyente (Secretaria o Profesor)
     ELSE#Consulta especifica por estado activo
     	SELECT  d.idDocumento,d.nombre,d.varsion as ver,d.vigencia,d.poseedor,d.proteccion,d.tiempo_retencion,d.nombre_file,c.idCategoria,d.idProceso,d.estado FROM documento d JOIN categoria c ON d.idCategoria=c.idCategoria WHERE d.idProceso=idProceso AND d.idDocumento=idDocumento AND d.estado=1;
     END IF;
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_ConsultarHistorialFecha` (IN `fecha1` VARCHAR(15), IN `fecha2` VARCHAR(15))  NO SQL
+BEGIN
+
+DECLARE fechaInicio varchar(15);
+
+IF fecha1!='' AND fecha2!='' THEN
+#Consulta el historial por rango de fecha
+SELECT u.documento,u.nombres,u.apellidos,CONCAT(DATE_FORMAT(h.fechaHora_descarga,'%d-%m-%Y'),' ',DATE_FORMAT(h.fechaHora_descarga,'%r')) AS fechaDescarga,d.nombre FROM usuario u JOIN historial h ON u.documento=h.documento JOIN documento d ON h.idDocumento=d.idDocumento WHERE DATE_FORMAT(h.fechaHora_descarga,'%Y-%m-%d') BETWEEN fecha1 AND fecha2;
+#SELECT 1;
+#...
+ELSE
+#Consulta unicamente por una fecha
+SET fechaInicio=(SELECT IF(fecha1='',fecha2,fecha1));
+SELECT u.documento,u.nombres,u.apellidos,CONCAT(DATE_FORMAT(h.fechaHora_descarga,'%d-%m-%Y'),' ',DATE_FORMAT(h.fechaHora_descarga,'%r')) AS fechaDescarga,d.nombre FROM usuario u JOIN historial h ON u.documento=h.documento JOIN documento d ON h.idDocumento=d.idDocumento WHERE DATE_FORMAT(h.fechaHora_descarga,'%Y-%m-%d')= fechaInicio;
+#SELECT 2;
+#...
 END IF;
 
 END$$
@@ -350,8 +370,7 @@ CREATE TABLE `documento` (
 --
 
 INSERT INTO `documento` (`idDocumento`, `nombre`, `varsion`, `vigencia`, `poseedor`, `proteccion`, `tiempo_retencion`, `nombre_file`, `idCategoria`, `idProceso`, `estado`) VALUES
-(1, 'Mi primer documento', '2', '0000-00-00', 'Alejandro', 'Diego alejandro', '', 'mayito-partes.pdf', 4, 6, 1),
-(2, 'Segundo documento', '1', '2018-01-12', 'magda', 'silvestre', '', 'Piano.pdf', 2, 6, 1);
+(1, 'Primer documento', '1', '0000-00-00', 'Anderson', 'alejandro', '-', 'consignacion.pdf', 2, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -371,17 +390,8 @@ CREATE TABLE `historial` (
 --
 
 INSERT INTO `historial` (`idHistorial`, `fechaHora_descarga`, `idDocumento`, `documento`) VALUES
-(1, '2018-09-23 17:49:10', 14, '98113053240'),
-(2, '2018-09-23 18:39:53', 10, '98113053240'),
-(3, '2018-09-23 18:44:34', 10, '98113053240'),
-(4, '2018-09-23 18:47:18', 10, '98113053240'),
-(5, '2018-09-23 18:52:47', 10, '98113053240'),
-(6, '2018-09-23 18:53:07', 13, '98113053240'),
-(7, '2018-09-23 18:53:27', 16, '98113053240'),
-(8, '2018-09-24 06:35:09', 10, '98113053240'),
-(9, '2018-09-24 06:35:40', 10, '98113053240'),
-(10, '2018-09-25 09:16:12', 10, '98113053240'),
-(11, '2018-09-25 11:31:58', 1, '98113053240');
+(1, '2018-10-02 06:33:46', 1, '98113053240'),
+(2, '2018-10-02 06:34:00', 1, '98113053240');
 
 -- --------------------------------------------------------
 
@@ -403,20 +413,9 @@ CREATE TABLE `proceso` (
 --
 
 INSERT INTO `proceso` (`idProceso`, `nombre_proceso`, `estado_visibilidad`, `idtipo_proceso`, `idProceso_sub`, `documento`) VALUES
-(1, 'Primera gestion1', 1, 1, 1, '1216727816'),
-(2, 'gestion 1', 0, 1, 2, '1216727816'),
-(3, 'Nueva gestion', 0, 1, 3, '1216727816'),
-(4, 'Ernesto', 1, 2, 1, '1216727816'),
-(5, 'Alejandro', 1, 2, 1, '1216727816'),
-(6, 'Anderson 2', 1, 3, 4, '1216727816'),
-(7, 'nueva gestion', 0, 1, 7, '1216727816'),
-(8, 'nueva gestion 2', 1, 1, 8, '1216727816'),
-(9, 'nueva gestion 3', 1, 1, 9, '1216727816'),
-(10, 'nuevo sub proceso', 1, 3, 4, '1216727816'),
-(11, 'otro sub proceso', 1, 3, 5, '1216727816'),
-(12, 'ajsjdasdasda', 1, 1, 12, '1216727816'),
-(13, 'Otro sub Proceso nuevo', 1, 3, 5, '1216727816'),
-(14, 'PRimer proceso de esta gestion', 1, 2, 2, '1216727816');
+(1, 'Primera gestion', 1, 1, 1, '1216727816'),
+(2, 'Proceso', 1, 2, 1, '1216727816'),
+(3, 'Primer sub-Proceso', 1, 3, 2, '1216727816');
 
 -- --------------------------------------------------------
 
@@ -461,7 +460,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`documento`, `nombres`, `apellidos`, `contraseña`, `rol`, `estado`, `correo`) VALUES
 ('1216727816', 'juan david ', 'marulanda paniagua', '123456L', 1, 2, 'juan@hotmail.com'),
-('98113053240', '45787512', 'Marulanda', '123456', 2, 1, 'juan@hotmail.com');
+('98113053240', 'Juan David', 'Marulanda', '123456', 2, 1, 'juan@hotmail.com');
 
 --
 -- Índices para tablas volcadas
@@ -524,19 +523,19 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `documento`
 --
 ALTER TABLE `documento`
-  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idDocumento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `historial`
 --
 ALTER TABLE `historial`
-  MODIFY `idHistorial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idHistorial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `proceso`
 --
 ALTER TABLE `proceso`
-  MODIFY `idProceso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `idProceso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_proceso`
